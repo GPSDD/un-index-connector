@@ -52,7 +52,7 @@ const ROLES = {
     }
 };
 
-const WB_DATASET_CREATE_REQUEST = {
+const RW_DATASET_CREATE_REQUEST = {
     connector: {
         __v: 0,
         name: 'Seasonal variability',
@@ -97,7 +97,52 @@ const WB_DATASET_CREATE_REQUEST = {
     }
 };
 
-const WB_API_METADATA = {
+const RW_FAKE_DATASET_CREATE_REQUEST = {
+    connector: {
+        __v: 0,
+        name: 'Fake dataset',
+        slug: 'fake-dataset_17',
+        connectorType: 'rest',
+        provider: 'worldbank',
+        userId: '1a10d7c6e0a37126611fd7a7',
+        updatedAt: '2018-06-01T11:04:47.231Z',
+        createdAt: '2018-06-01T11:04:47.231Z',
+        legend: {
+            nested: [],
+            country: [],
+            region: [],
+            date: []
+        },
+        taskId: null,
+        'protected': false,
+        geoInfo: false,
+        env: 'production',
+        sandbox: false,
+        published: true,
+        errorMessage: null,
+        verified: false,
+        overwrite: false,
+        status: 'pending',
+        tableName: 'fake-indicator-name',
+        connectorUrl: null,
+        attributesPath: null,
+        dataPath: null,
+        application: 'data4sdgs',
+        type: null,
+        _id: '55866e83-9aea-44e5-94fc-44866e83b052',
+        id: '55866e83-9aea-44e5-94fc-44866e83b052',
+        connector_url: null,
+        attributes_path: null,
+        data_path: null,
+        table_name: 'fake-indicator-name'
+    },
+    userId: '1a10d7c6e0a37126611fd7a7',
+    loggedUser: {
+        id: 'microservice'
+    }
+};
+
+const RW_API_METADATA = {
     id: 'per_si_allsi.cov_pop_tot',
     name: 'Coverage of social insurance programs (% of population)',
     unit: '',
@@ -115,7 +160,7 @@ const WB_API_METADATA = {
     ]
 };
 
-const WB_API_METADATA_RESPONSE = [
+const RW_API_METADATA_RESPONSE = [
     {
         page: 1,
         pages: 1,
@@ -123,13 +168,23 @@ const WB_API_METADATA_RESPONSE = [
         total: 1
     },
     [
-        WB_API_METADATA
+        RW_API_METADATA
     ]
 ];
 
+const RW_API_FAKE_METADATA_RESPONSE = [{
+    message: [{
+        id: '120',
+        key: 'Invalid value',
+        value: 'The provided parameter value is not valid'
+    }]
+}];
+
 module.exports = {
     ROLES,
-    WB_API_METADATA_RESPONSE,
-    WB_DATASET_CREATE_REQUEST,
-    WB_API_METADATA
-}
+    RW_API_METADATA_RESPONSE,
+    RW_API_FAKE_METADATA_RESPONSE,
+    RW_DATASET_CREATE_REQUEST,
+    RW_FAKE_DATASET_CREATE_REQUEST,
+    RW_API_METADATA
+};

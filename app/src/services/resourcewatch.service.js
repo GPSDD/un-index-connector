@@ -27,7 +27,7 @@ class RWIndexService {
                 }
             }
         } catch (err) {
-            logger.error('Error in cronupdate', err);
+            logger.error('Error in cron update', err);
             throw err;
         }
     }
