@@ -58,7 +58,7 @@ const WB_DATASET_CREATE_REQUEST = {
         name: 'Seasonal variability',
         slug: 'Seasonal-variability_17',
         connectorType: 'rest',
-        provider: 'worldbank',
+        provider: 'resourcewatch',
         userId: '1a10d7c6e0a37126611fd7a7',
         updatedAt: '2018-06-01T11:04:47.231Z',
         createdAt: '2018-06-01T11:04:47.231Z',
@@ -106,7 +106,7 @@ const WB_API_METADATA = {
         value: 'World Development Indicators'
     },
     sourceNote: 'Coverage of social insurance programs shows the percentage of population participating in programs that provide old age contributory pensions (including survivors and disability) and social security and health insurance benefits (including occupational injury benefits, paid sick leave, maternity and other social insurance). Estimates include both direct and indirect beneficiaries.',
-    sourceOrganization: 'ASPIRE: The Atlas of Social Protection - Indicators of Resilience and Equity, The World Bank. Data are based on national representative household surveys. (datatopics.worldbank.org/aspire/)',
+    sourceOrganization: 'ASPIRE: The Atlas of Social Protection - Indicators of Resilience and Equity, The World Bank. Data are based on national representative household surveys. (datatopics.resourcewatch.org/aspire/)',
     topics: [
         {
             id: '10',

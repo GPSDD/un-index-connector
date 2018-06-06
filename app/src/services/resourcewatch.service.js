@@ -4,9 +4,7 @@ const requestPromise = require('request-promise');
 const config = require('config');
 const ctRegisterMicroservice = require('ct-register-microservice-node');
 
-class WBIndexService {
-
-    
+class RWIndexService {
 
     static async cronUpdate() {
         try {
@@ -14,7 +12,7 @@ class WBIndexService {
             logger.debug('Obtaining datasets');
             const datasets = await ctRegisterMicroservice.requestToMicroservice({
                 method: 'GET',
-                uri: `/dataset?provider=worldbank&page[size]=99999&status=saved`,
+                uri: `/dataset?provider=resourcewatch&page[size]=99999&status=saved`,
                 json: true
             });
             if (datasets && datasets.data) {
@@ -22,45 +20,45 @@ class WBIndexService {
                     try {
                         const dataset = datasets.data[i].attributes;
                         dataset.id = datasets.data[i].id;
-                        await WBIndexService.register(dataset, dataset.userId, true);
-                    } catch(err) {
+                        await RWIndexService.register(dataset, dataset.userId, true);
+                    } catch (err) {
                         logger.error('Error updating dataset', err);
                     }
                 }
             }
-        } catch(err) {
+        } catch (err) {
             logger.error('Error in cronupdate', err);
             throw err;
         }
     }
 
-    static async register(dataset, userId, update= false) {
+    static async register(dataset, userId, update = false) {
         logger.debug(`Obtaining metadata of indicator ${dataset.tableName}`);
 
-        logger.debug('Obtaining metadata of dataset ', `${config.worldbank.metadata}`.replace(':indicator', dataset.tableName));
+        logger.debug('Obtaining metadata of dataset ', `${config.resourcewatch.metadata}`.replace(':indicator', dataset.tableName));
         try {
             const data = await requestPromise({
                 method: 'GET',
-                url: `${config.worldbank.metadata}`.replace(':indicator', dataset.tableName),
+                url: `${config.resourcewatch.metadata}`.replace(':indicator', dataset.tableName),
                 json: true
             });
             logger.debug('data', data);
             if (!data || data.length !== 2 || data[1].length !== 1) {
                 throw new Error('Format not valid');
             }
-            const wbMetadata = data[1][0];
+            const rwMetadata = data[1][0];
             const metadata = {
                 language: 'en',
-                name: wbMetadata.name,
-                description: wbMetadata.sourceNote,
+                name: rwMetadata.name,
+                description: rwMetadata.sourceNote,
                 sourceOrganization: 'World Bank Group',
-                dataSourceUrl: config.worldbank.dataSourceUrl.replace(':indicator', dataset.tableName),
-                dataSourceEndpoint: config.worldbank.dataSourceEndpoint.replace(':indicator', dataset.tableName),
+                dataSourceUrl: config.resourcewatch.dataSourceUrl.replace(':indicator', dataset.tableName),
+                dataSourceEndpoint: config.resourcewatch.dataSourceEndpoint.replace(':indicator', dataset.tableName),
                 status: 'published',
                 license: 'CC-BY',
                 userId,
                 info: {
-                    topics: wbMetadata.topics && Array.isArray(wbMetadata.topics) ? wbMetadata.topics.map(e => e.value) : []
+                    topics: rwMetadata.topics && Array.isArray(rwMetadata.topics) ? rwMetadata.topics.map(e => e.value) : []
                 }
             };
             logger.debug('Saving metadata', metadata);
@@ -88,4 +86,4 @@ class WBIndexService {
 
 }
 
-module.exports = WBIndexService;
+module.exports = RWIndexService;

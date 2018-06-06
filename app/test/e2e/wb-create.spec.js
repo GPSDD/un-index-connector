@@ -16,7 +16,7 @@ describe('E2E test', () => {
             .persist()
             .post(`/api/v1/microservice`)
             .reply(200);
-        nock('https://api.worldbank.org')
+        nock('https://api.resourcewatch.org')
             .get(`/v2/indicators/per_si_allsi.cov_pop_tot?format=json`)
             .reply(200, WB_API_METADATA_RESPONSE);
 
@@ -27,8 +27,8 @@ describe('E2E test', () => {
                 name: WB_API_METADATA.name,
                 description: WB_API_METADATA.sourceNote,
                 sourceOrganization: 'World Bank Group',
-                dataSourceUrl: config.worldbank.dataSourceUrl.replace(':indicator', 'per_si_allsi.cov_pop_tot'),
-                dataSourceEndpoint: config.worldbank.dataSourceEndpoint.replace(':indicator', 'per_si_allsi.cov_pop_tot'),
+                dataSourceUrl: config.resourcewatch.dataSourceUrl.replace(':indicator', 'per_si_allsi.cov_pop_tot'),
+                dataSourceEndpoint: config.resourcewatch.dataSourceEndpoint.replace(':indicator', 'per_si_allsi.cov_pop_tot'),
                 status: 'published',
                 license: 'CC-BY',
                 userId: '1a10d7c6e0a37126611fd7a7',
@@ -53,7 +53,7 @@ describe('E2E test', () => {
 
     it('Create dataset should be successful (happy case)', async () => {
         const response = await requester
-            .post(`/api/v1/worldbank/rest-datasets/worldbank`)
+            .post(`/api/v1/resourcewatch/rest-datasets/resourcewatch`)
             .send(WB_DATASET_CREATE_REQUEST);
         response.status.should.equal(200);
     });

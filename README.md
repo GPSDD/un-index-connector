@@ -1,7 +1,7 @@
-# World Bank Index Adapter
+# Resource Watch Index Adapter
 
 
-This repository is the microservice that implements the World Bank Index Adapter
+This repository is the microservice that implements the Resource Watch Index Adapter
 funcionality
 
 1. [Getting Started](#getting-started)
@@ -38,17 +38,17 @@ It is necessary to define these environment variables:
 ## Field correspondence
 
 
-| Field in SDG Metadata     | Field in WB Metadata  | Value         |
+| Field in SDG Metadata     | Field in RW Metadata  | Value         |
 |---------------------------|-----------------------|---------------|
-| userId                    | -                     | 'published'   |
+| userId                    |                       |               |
 | language                  |                       | 'en'          |
 | resource                  |                       |               |
 | name                      | name                  |               |
-| description               | sourceNote            |               |
-| sourceOrganization        | -                     | 'World Bank Group' |
-| dataDownloadUrl           | -                     | 'https://api.worldbank.org/v2/countries/all/indicators/:indicator?format=json&per_page=30000' with :indicator = id of indicator|
-| dataSourceUrl             | -                     | 'https://data.worldbank.org/indicator/:indicator' with :indicator = id of indicator       |
-| dataSourceEndpoint        |                       | 'https://api.worldbank.org/v2/countries/all/indicators/:indicator?format=json&per_page=30000' with :indicator = id of indicator|
-| license                   |                       | 'CC BY 4.0'   |
-| info                      | topics                |               |
-| status                    | -                     | 'published'   |
+| description               | description           |               |
+| sourceOrganization        |                       | 'Resource Watch' |
+| dataDownloadUrl           |                       | '' with :indicator = id of indicator |
+| dataSourceUrl             | source (prio1)        | (will depend on source app) (prio 2) |
+| dataSourceEndpoint        |                       | 'https://api.resourcewatch.org/v2/countries/all/indicators/:indicator?format=json&per_page=30000' with :indicator = id of indicator|
+| license                   | license               |               |
+| info                      | info                  |               |
+| status                    |                       | 'published'   |

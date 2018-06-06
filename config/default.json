@@ -10,10 +10,10 @@
         "name": "WB Indexing Adapter",
         "port": 3010
     },
-    "worldbank": {
-        "metadata": "https://api.worldbank.org/v2/indicators/:indicator?format=json",
-        "dataSourceUrl": "https://data.worldbank.org/indicator/:indicator",
-        "dataSourceEndpoint": "https://api.worldbank.org/v2/countries/all/indicators/:indicator?format=json&per_page=30000"
+    "resourcewatch": {
+        "metadata": "https://api.resourcewatch.org/v2/indicators/:indicator?format=json",
+        "dataSourceUrl": "https://data.resourcewatch.org/indicator/:indicator",
+        "dataSourceEndpoint": "https://api.resourcewatch.org/v2/countries/all/indicators/:indicator?format=json&per_page=30000"
     },
     "cron": "00 * * * * *"
 }

@@ -1,7 +1,7 @@
 {
-	"name": "World Bank Index Adapter",
-	"cache": ["index-wb"],
-	"uncache": ["index-wb"],
+	"name": "Resource Watch Index Adapter",
+	"cache": ["index-rw"],
+	"uncache": ["index-rw"],
 	"tags": ["rw"],
 	"endpoints": [{
 		"path": "/v1/query/:dataset",
@@ -9,7 +9,7 @@
 		"binary": true,
 		"redirect": {
 			"method": "POST",
-			"path": "/api/v1/worldbank/query/:dataset"
+			"path": "/api/v1/resourcewatch/query/:dataset"
 		},
 		"filters": [{
 			"name": "dataset",
@@ -21,7 +21,7 @@
 			"compare": {
 				"data": {
 					"attributes": {
-						"provider": "worldbank"
+						"provider": "resourcewatch"
 					}
 				}
 			}
@@ -32,7 +32,7 @@
 		"binary": true,
 		"redirect": {
 			"method": "POST",
-			"path": "/api/v1/worldbank/query/:dataset"
+			"path": "/api/v1/resourcewatch/query/:dataset"
 		},
 		"filters": [{
 			"name": "dataset",
@@ -44,7 +44,7 @@
 			"compare": {
 				"data": {
 					"attributes": {
-						"provider": "worldbank"
+						"provider": "resourcewatch"
 					}
 				}
 			}
@@ -55,7 +55,7 @@
 		"binary": true,
 		"redirect": {
 			"method": "POST",
-			"path": "/api/v1/worldbank/download/:dataset"
+			"path": "/api/v1/resourcewatch/download/:dataset"
 		},
 		"filters": [{
 			"name": "dataset",
@@ -67,7 +67,7 @@
 			"compare": {
 				"data": {
 					"attributes": {
-						"provider": "worldbank"
+						"provider": "resourcewatch"
 					}
 				}
 			}
@@ -78,7 +78,7 @@
 		"binary": true,
 		"redirect": {
 			"method": "POST",
-			"path": "/api/v1/worldbank/download/:dataset"
+			"path": "/api/v1/resourcewatch/download/:dataset"
 		},
 		"filters": [{
 			"name": "dataset",
@@ -90,7 +90,7 @@
 			"compare": {
 				"data": {
 					"attributes": {
-						"provider": "worldbank"
+						"provider": "resourcewatch"
 					}
 				}
 			}
@@ -100,7 +100,7 @@
 		"method": "GET",
 		"redirect": {
 			"method": "POST",
-			"path": "/api/v1/worldbank/fields/:dataset"
+			"path": "/api/v1/resourcewatch/fields/:dataset"
 		},
 		"filters": [{
 			"name": "dataset",
@@ -112,17 +112,17 @@
 			"compare": {
 				"data": {
 					"attributes": {
-						"provider": "worldbank"
+						"provider": "resourcewatch"
 					}
 				}
 			}
 		}]
 	}, {
-		"path": "/v1/rest-datasets/worldbank",
+		"path": "/v1/rest-datasets/resourcewatch",
 		"method": "POST",
 		"redirect": {
 			"method": "POST",
-			"path": "/api/v1/worldbank/rest-datasets/worldbank"
+			"path": "/api/v1/resourcewatch/rest-datasets/resourcewatch"
 		}
 	}]
 }
