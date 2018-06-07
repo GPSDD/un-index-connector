@@ -1,26 +1,18 @@
 const nock = require('nock');
 const chai = require('chai');
-const chaiHttp = require('chai-http');
 const should = chai.should();
 const {
     RW_FAKE_DATASET_CREATE_REQUEST,
 } = require('./test.constants');
 const config = require('config');
+const { getTestServer } = require('./test-server');
 
-let requester;
-
-chai.use(chaiHttp);
+const requester = getTestServer();
 
 describe('E2E test', () => {
     before(() => {
 
         nock.cleanAll();
-
-        // nock(`${process.env.CT_URL}`)
-        //     .post(`/api/v1/microservice`)
-        //     .once()
-        //     .reply(200);
-
 
         // RW responses for info and metadata on fake dataset
         nock('https://api.resourcewatch.org')
@@ -38,9 +30,6 @@ describe('E2E test', () => {
             })
             .once()
             .reply(200);
-
-        const server = require('../../src/app');
-        requester = chai.request(server).keepOpen();
     });
 
     it('Create a dataset for an dataset that doesn\'t exist should return an error', async () => {

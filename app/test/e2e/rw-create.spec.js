@@ -1,6 +1,5 @@
 const nock = require('nock');
 const chai = require('chai');
-const chaiHttp = require('chai-http');
 const should = chai.should();
 const {
     RW_API_METADATA_RESPONSE,
@@ -8,20 +7,14 @@ const {
     RW_API_DATASET_RESPONSE
 } = require('./test.constants');
 const config = require('config');
+const { getTestServer } = require('./test-server');
 
-let requester;
-
-chai.use(chaiHttp);
+const requester = getTestServer();
 
 describe('E2E test', () => {
     before(() => {
 
         nock.cleanAll();
-
-        nock(`${process.env.CT_URL}`)
-            .post(`/api/v1/microservice`)
-            .once()
-            .reply(200);
 
         // RW responses for info and metadata on real dataset
         nock('https://api.resourcewatch.org')
@@ -43,9 +36,6 @@ describe('E2E test', () => {
             })
             .times(6)
             .reply(200);
-
-        const server = require('../../src/app');
-        requester = chai.request(server).keepOpen();
     });
 
     it('Create dataset with no language and no app should be successful and use the first metadata', async () => {
