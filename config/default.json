@@ -8,12 +8,13 @@
     "service": {
         "id": "world-bank-index-adapter_1.0.0",
         "name": "WB Indexing Adapter",
-        "port": 3010
+        "port": 3011
     },
     "resourcewatch": {
-        "metadata": "https://api.resourcewatch.org/v2/indicators/:indicator?format=json",
-        "dataSourceUrl": "https://data.resourcewatch.org/indicator/:indicator",
-        "dataSourceEndpoint": "https://api.resourcewatch.org/v2/countries/all/indicators/:indicator?format=json&per_page=30000"
+        "metadata": "https://api.resourcewatch.org/v1/dataset/:dataset-id/metadata?format=json",
+        "dataset": "https://api.resourcewatch.org/v1/dataset/:dataset-id?format=json",
+        "dataSourceUrl": "https://data.resourcewatch.org/indicator/dataset-id",
+        "dataSourceEndpoint": "https://api.resourcewatch.org/v1/download?sql=select%20*%20from%20:dataset-id"
     },
     "cron": "00 * * * * *"
 }

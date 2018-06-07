@@ -46,7 +46,7 @@ It is necessary to define these environment variables:
 | name                      | name                  |               |
 | description               | description           |               |
 | sourceOrganization        |                       | 'Resource Watch' |
-| dataDownloadUrl           |                       | '' with :indicator = id of indicator |
+| dataDownloadUrl           |                       | '' with :dataset-id = id of dataset |
 | dataSourceUrl             | source (prio1)        | (will depend on source app) (prio 2) |
 | dataSourceEndpoint        |                       | 'https://api.resourcewatch.org/v2/countries/all/indicators/:indicator?format=json&per_page=30000' with :indicator = id of indicator|
 | license                   | license               |               |

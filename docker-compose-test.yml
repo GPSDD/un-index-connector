@@ -3,7 +3,7 @@ test:
     file: base.yml
     service: base
   ports:
-    - "3010"
+    - "3011"
   container_name: world-bank-index-adapter-test
   environment:
     NODE_ENV: test

@@ -43,17 +43,21 @@ class RWIndexRouter {
             });
         } catch (e) {
             logger.error(e);
-            await ctRegisterMicroservice.requestToMicroservice({
-                method: 'PATCH',
-                uri: `/dataset/${ctx.request.body.connector.id}`,
-                body: {
-                    dataset: {
-                        status: 2,
-                        errorMessage: `${e.name} - ${e.message}`
-                    }
-                },
-                json: true
-            });
+            try {
+                await ctRegisterMicroservice.requestToMicroservice({
+                    method: 'PATCH',
+                    uri: `/dataset/${ctx.request.body.connector.id}`,
+                    body: {
+                        dataset: {
+                            status: 2,
+                            errorMessage: `${e.name} - ${e.message}`
+                        }
+                    },
+                    json: true
+                });
+            } catch (err) {
+                throw err;
+            }
         }
         ctx.body = {};
     }

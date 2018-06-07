@@ -1,7 +1,7 @@
 prod:
   image: vizzuality/world-bank-index-adapter:1.2.0${STAGING}
   ports:
-    - "3010"
+    - "3011"
   env_file:
     - prod.env
   command: start

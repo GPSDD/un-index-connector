@@ -25,13 +25,13 @@ spec:
           - start
         env:
           - name: PORT
-            value: "3010"
+            value: "3011"
           - name: NODE_ENV
             value: staging
           - name: NODE_PATH
             value: app/src
           - name: LOCAL_URL
-            value: http://{name}.default.svc.cluster.local:3010
+            value: http://{name}.default.svc.cluster.local:3011
           - name: CRON_PATTERN
             value: "00 0 1  * * *"
           - name: CT_URL
@@ -56,6 +56,6 @@ spec:
                   key: API_VERSION
 
         ports:
-          - containerPort: 3010
+          - containerPort: 3011
 
       restartPolicy: Always

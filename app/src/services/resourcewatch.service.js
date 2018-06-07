@@ -1,8 +1,24 @@
 const logger = require('logger');
-const url = require('url');
 const requestPromise = require('request-promise');
 const config = require('config');
 const ctRegisterMicroservice = require('ct-register-microservice-node');
+
+const ACCEPTED_LICENSE_STRINGS = [
+    'Public Domain',
+    'CC-0',
+    'PDDL',
+    'CC-BY',
+    'CDLA-Permissive-1.0',
+    'ODC-BY',
+    'CC-BY-SA',
+    'CDLA-Sharing-1.0',
+    'ODC-ODbL',
+    'CC BY-NC',
+    'CC BY-ND',
+    'CC BY-NC-SA',
+    'CC BY-NC-ND',
+    'Other'
+];
 
 class RWIndexService {
 
@@ -35,31 +51,93 @@ class RWIndexService {
     static async register(dataset, userId, update = false) {
         logger.debug(`Obtaining metadata of indicator ${dataset.tableName}`);
 
-        logger.debug('Obtaining metadata of dataset ', `${config.resourcewatch.metadata}`.replace(':indicator', dataset.tableName));
+        logger.debug('Obtaining dataset info and metadata of dataset ', `${config.resourcewatch.metadata}`.replace(':dataset-id', dataset.tableName));
         try {
-            const data = await requestPromise({
+            const rwDatasetResponse = await requestPromise({
                 method: 'GET',
-                url: `${config.resourcewatch.metadata}`.replace(':indicator', dataset.tableName),
+                url: `${config.resourcewatch.dataset}`.replace(':dataset-id', dataset.tableName),
                 json: true
             });
-            logger.debug('data', data);
-            if (!data || data.length !== 2 || data[1].length !== 1) {
-                throw new Error('Format not valid');
+            logger.debug('RW dataset response', rwDatasetResponse);
+
+            let rwDataset;
+            if (rwDatasetResponse && rwDatasetResponse.data) {
+                rwDataset = rwDatasetResponse.data;
             }
-            const rwMetadata = data[1][0];
+
+            const rwMetadataResponse = await requestPromise({
+                method: 'GET',
+                url: `${config.resourcewatch.metadata}`.replace(':dataset-id', dataset.tableName),
+                json: true
+            });
+            logger.debug('RW metadata response', rwMetadataResponse);
+
+            if (!rwMetadataResponse || !rwMetadataResponse.data || rwMetadataResponse.data.length === 0) {
+                throw new Error('Dataset metadata response format not valid');
+            }
+
+            let rwMetadataList = rwMetadataResponse.data;
+
+            if (rwMetadataList.sourceLanguage) {
+                rwMetadataList = rwMetadataList.filter(elem => elem.attributes.language === dataset.sourceLanguage);
+            }
+
+            if (dataset.sourceApplication) {
+                rwMetadataList = rwMetadataList.filter(elem => elem.attributes.application.includes(dataset.sourceApplication));
+            }
+
+            if (rwMetadataList.length === 0) {
+                throw new Error('Dataset metadata response format not valid');
+            }
+
+            const rwMetadata = rwMetadataList[0].attributes;
+
+            let sourceOrganization;
+            const dataDownloadURL = config.resourcewatch.dataSourceEndpoint.replace(':dataset-id', rwMetadata.dataset);
+            let datasetPage = dataDownloadURL;
+
+            switch (rwMetadata.application) {
+
+                case 'prep':
+                    sourceOrganization = 'PREP- Partnership for Resilience & Preparedness';
+                    if (rwDataset) {
+                        datasetPage = `https://www.prepdata.org/dataset/${rwDataset.slug}`;
+                    }
+                    break;
+                case 'gfw':
+                    sourceOrganization = 'Global Forest Watch';
+                    break;
+                case 'gfw-climate':
+                    sourceOrganization = 'Global Forest Watch - Climate';
+                    break;
+                case 'aqueduct':
+                    sourceOrganization = 'Aqueduct';
+                    break;
+                case 'forest-atlas':
+                case 'rw':
+                    sourceOrganization = 'Resource Watch';
+                    if (rwDataset) {
+                        datasetPage = `https://resourcewatch.org/data/explore/${rwDataset.slug}`;
+                    }
+                    break;
+                default:
+                    sourceOrganization = 'Resource Watch API';
+                    break;
+
+            }
+
             const metadata = {
-                language: 'en',
+                language: rwMetadata.language,
                 name: rwMetadata.name,
-                description: rwMetadata.sourceNote,
-                sourceOrganization: 'World Bank Group',
-                dataSourceUrl: config.resourcewatch.dataSourceUrl.replace(':indicator', dataset.tableName),
-                dataSourceEndpoint: config.resourcewatch.dataSourceEndpoint.replace(':indicator', dataset.tableName),
+                description: rwMetadata.description,
+                sourceOrganization,
+                dataSourceUrl: datasetPage,
+                dataSourceEndpoint: dataDownloadURL,
+                dataDownloadUrl: dataDownloadURL,
                 status: 'published',
-                license: 'CC-BY',
+                license: ACCEPTED_LICENSE_STRINGS.includes(rwMetadata.license) ? rwMetadata.license : 'Other',
                 userId,
-                info: {
-                    topics: rwMetadata.topics && Array.isArray(rwMetadata.topics) ? rwMetadata.topics.map(e => e.value) : []
-                }
+                info: rwMetadata.info
             };
             logger.debug('Saving metadata', metadata);
             if (!update) {

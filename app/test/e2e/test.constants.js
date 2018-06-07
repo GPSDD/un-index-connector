@@ -78,7 +78,7 @@ const RW_DATASET_CREATE_REQUEST = {
         verified: false,
         overwrite: false,
         status: 'pending',
-        tableName: 'per_si_allsi.cov_pop_tot',
+        tableName: 'real-rw-dataset-id',
         connectorUrl: null,
         attributesPath: null,
         dataPath: null,
@@ -89,7 +89,7 @@ const RW_DATASET_CREATE_REQUEST = {
         connector_url: null,
         attributes_path: null,
         data_path: null,
-        table_name: 'per_si_allsi.cov_pop_tot'
+        table_name: 'real-rw-dataset-id'
     },
     userId: '1a10d7c6e0a37126611fd7a7',
     loggedUser: {
@@ -123,7 +123,7 @@ const RW_FAKE_DATASET_CREATE_REQUEST = {
         verified: false,
         overwrite: false,
         status: 'pending',
-        tableName: 'fake-indicator-name',
+        tableName: 'fake-dataset-name',
         connectorUrl: null,
         attributesPath: null,
         dataPath: null,
@@ -134,7 +134,7 @@ const RW_FAKE_DATASET_CREATE_REQUEST = {
         connector_url: null,
         attributes_path: null,
         data_path: null,
-        table_name: 'fake-indicator-name'
+        table_name: 'fake-dataset-name'
     },
     userId: '1a10d7c6e0a37126611fd7a7',
     loggedUser: {
@@ -142,49 +142,83 @@ const RW_FAKE_DATASET_CREATE_REQUEST = {
     }
 };
 
-const RW_API_METADATA = {
-    id: 'per_si_allsi.cov_pop_tot',
-    name: 'Coverage of social insurance programs (% of population)',
-    unit: '',
-    source: {
-        id: '2',
-        value: 'World Development Indicators'
-    },
-    sourceNote: 'Coverage of social insurance programs shows the percentage of population participating in programs that provide old age contributory pensions (including survivors and disability) and social security and health insurance benefits (including occupational injury benefits, paid sick leave, maternity and other social insurance). Estimates include both direct and indirect beneficiaries.',
-    sourceOrganization: 'ASPIRE: The Atlas of Social Protection - Indicators of Resilience and Equity, The World Bank. Data are based on national representative household surveys. (datatopics.resourcewatch.org/aspire/)',
-    topics: [
+const RW_API_DATASET_RESPONSE = {
+    data: {
+        id: '03a8da41-d8d0-4095-8fd5-267a25d5fc31',
+        type: 'dataset',
+        attributes: {
+            name: 'GDP per capita (current US$)',
+            slug: 'GDP-per-capita-current-USdollar-1490086842131',
+            type: null,
+            subtitle: null,
+            application: [
+                'data4sdgs'
+            ],
+            dataPath: null,
+            attributesPath: null,
+            connectorType: 'document',
+            provider: 'csv',
+            userId: '58333dcfd9f39b189ca44c75',
+            connectorUrl: 'http://staging-api.globalforestwatch.org:8080/world_bank/GDP%20per%20capita%20(current%20US%24).csv',
+            tableName: 'index_03a8da41d8d040958fd5267a25d5fc31',
+            status: 'saved',
+            published: true,
+            overwrite: false,
+            verified: false,
+            blockchain: {},
+            mainDateField: null,
+            env: 'production',
+            geoInfo: false,
+            'protected': false,
+            legend: {
+                date: [],
+                region: [],
+                country: [],
+                nested: []
+            },
+            clonedHost: {},
+            errorMessage: null,
+            taskId: null,
+            updatedAt: '2017-01-19T10:34:32.524Z',
+            widgetRelevantProps: [],
+            layerRelevantProps: []
+        }
+    }
+};
+
+const RW_API_METADATA_RESPONSE = {
+    data: [
         {
-            id: '10',
-            value: 'Social Protection & Labor'
+            id: '588217d53d81e10b00e6a59f',
+            type: 'metadata',
+            attributes: {
+                dataset: '03a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                application: 'data4sdgs',
+                resource: {
+                    type: 'dataset',
+                    id: '03a8da41-d8d0-4095-8fd5-267a25d5fc31'
+                },
+                language: 'en',
+                name: 'GDP per capita (current US$)',
+                description: 'GDP per capita is gross domestic product divided by midyear population. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current U.S. dollars.',
+                source: 'World Bank national accounts data, and OECD National Accounts data files.',
+                license: 'Open',
+                info: {
+                    dataDownload: 'http://api.worldbank.org/v2/en/indicator/NY.GDP.PCAP.CD?downloadformat=csv',
+                    organization: 'World Bank Group'
+                },
+                createdAt: '2017-01-20T13:59:49.788Z',
+                updatedAt: '2017-01-20T13:59:49.788Z',
+                status: 'published'
+            }
         }
     ]
 };
 
-const RW_API_METADATA_RESPONSE = [
-    {
-        page: 1,
-        pages: 1,
-        per_page: '50',
-        total: 1
-    },
-    [
-        RW_API_METADATA
-    ]
-];
-
-const RW_API_FAKE_METADATA_RESPONSE = [{
-    message: [{
-        id: '120',
-        key: 'Invalid value',
-        value: 'The provided parameter value is not valid'
-    }]
-}];
-
 module.exports = {
     ROLES,
+    RW_API_DATASET_RESPONSE,
     RW_API_METADATA_RESPONSE,
-    RW_API_FAKE_METADATA_RESPONSE,
     RW_DATASET_CREATE_REQUEST,
-    RW_FAKE_DATASET_CREATE_REQUEST,
-    RW_API_METADATA
+    RW_FAKE_DATASET_CREATE_REQUEST
 };

@@ -1,9 +1,9 @@
 base:
   build: .
   ports:
-    - "3010:3010"
+    - "3011:3011"
   container_name: world-bank-index-adapter
   environment:
-    PORT: 3010
+    PORT: 3011
     NODE_PATH: app/src
 
