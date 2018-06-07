@@ -4,9 +4,10 @@ test:
     service: base
   ports:
     - "3011"
-  container_name: world-bank-index-adapter-test
+  container_name: resource-watch-index-adapter-test
   environment:
     NODE_ENV: test
     CT_URL: http://mymachine:9000
     API_VERSION: v1
+    CT_REGISTER_MODE: auto
   command: test

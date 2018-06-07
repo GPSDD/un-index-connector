@@ -20,7 +20,7 @@ installed on your machine.
 
 ```
 git clone https://github.com/Vizzuality/gfw-geostore-api.git
-cd world-bank-index-adapter
+cd resource-watch-index-adapter
 ./adapter.sh develop
 ```text
 

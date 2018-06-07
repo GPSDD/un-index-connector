@@ -12,4 +12,4 @@ develop:
     CT_REGISTER_MODE: auto
   command: develop
   volumes:
-    - ./app:/opt/world-bank-index-adapter/app
+    - ./app:/opt/resource-watch-index-adapter/app

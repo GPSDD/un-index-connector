@@ -1,8 +1,8 @@
 FROM mhart/alpine-node:7.6
 MAINTAINER raul.requero@vizzuality.com
 
-ENV NAME world-bank-index-adapter
-ENV USER world-bank-index-adapter
+ENV NAME resource-watch-index-adapter
+ENV USER resource-watch-index-adapter
 
 RUN apk update && apk upgrade && \
     apk add --no-cache --update bash git openssh python alpine-sdk

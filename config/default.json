@@ -1,13 +1,13 @@
 {
      "logger": {
-        "name": "world-bank-index-adapter-DEV",
+        "name": "resource-watch-index-adapter-DEV",
         "level": "debug",
         "toFile": false,
         "dirLogFile": null
     },
     "service": {
-        "id": "world-bank-index-adapter_1.0.0",
-        "name": "WB Indexing Adapter",
+        "id": "resource-watch-index-adapter_1.0.0",
+        "name": "RW Indexing Adapter",
         "port": 3011
     },
     "resourcewatch": {

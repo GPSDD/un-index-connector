@@ -2,7 +2,7 @@ base:
   build: .
   ports:
     - "3011:3011"
-  container_name: world-bank-index-adapter
+  container_name: resource-watch-index-adapter
   environment:
     PORT: 3011
     NODE_PATH: app/src
