@@ -61,8 +61,8 @@ class RWIndexService {
             logger.debug('RW dataset response', rwDatasetResponse);
 
             let rwDataset;
-            if (rwDatasetResponse && rwDatasetResponse.data) {
-                rwDataset = rwDatasetResponse.data;
+            if (rwDatasetResponse && rwDatasetResponse.data && rwDatasetResponse.data.attributes) {
+                rwDataset = rwDatasetResponse.data.attributes;
             }
 
             const rwMetadataResponse = await requestPromise({
@@ -78,7 +78,7 @@ class RWIndexService {
 
             let rwMetadataList = rwMetadataResponse.data;
 
-            if (rwMetadataList.sourceLanguage) {
+            if (dataset.sourceLanguage) {
                 rwMetadataList = rwMetadataList.filter(elem => elem.attributes.language === dataset.sourceLanguage);
             }
 

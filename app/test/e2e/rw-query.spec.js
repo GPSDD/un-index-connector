@@ -18,6 +18,8 @@ const dataset = {
 describe('E2E test', () => {
     before(() => {
 
+        nock.cleanAll();
+
         nock(`${process.env.CT_URL}`)
             .persist()
             .post(`/api/v1/microservice`)

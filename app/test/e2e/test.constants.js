@@ -195,11 +195,131 @@ const RW_API_METADATA_RESPONSE = {
                 dataset: '03a8da41-d8d0-4095-8fd5-267a25d5fc31',
                 application: 'data4sdgs',
                 resource: {
+                    type: 'rw',
+                    id: '03a8da41-d8d0-4095-8fd5-267a25d5fc31'
+                },
+                language: 'es',
+                name: 'Name for RW in Spanish',
+                description: 'GDP per capita is gross domestic product divided by midyear population. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current U.S. dollars.',
+                source: 'World Bank national accounts data, and OECD National Accounts data files.',
+                license: 'Open',
+                info: {
+                    dataDownload: 'http://api.worldbank.org/v2/en/indicator/NY.GDP.PCAP.CD?downloadformat=csv',
+                    organization: 'World Bank Group'
+                },
+                createdAt: '2017-01-20T13:59:49.788Z',
+                updatedAt: '2017-01-20T13:59:49.788Z',
+                status: 'published'
+            }
+        },
+        {
+            id: '588217d53d81e10b00e6a59f',
+            type: 'metadata',
+            attributes: {
+                dataset: '03a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                application: 'aqueduct',
+                resource: {
+                    type: 'dataset',
+                    id: '03a8da41-d8d0-4095-8fd5-267a25d5fc31'
+                },
+                language: 'es',
+                name: 'Name for Aqueduct in Spanish',
+                description: 'GDP per capita is gross domestic product divided by midyear population. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current U.S. dollars.',
+                source: 'World Bank national accounts data, and OECD National Accounts data files.',
+                license: 'Open',
+                info: {
+                    dataDownload: 'http://api.worldbank.org/v2/en/indicator/NY.GDP.PCAP.CD?downloadformat=csv',
+                    organization: 'World Bank Group'
+                },
+                createdAt: '2017-01-20T13:59:49.788Z',
+                updatedAt: '2017-01-20T13:59:49.788Z',
+                status: 'published'
+            }
+        },
+        {
+            id: '588217d53d81e10b00e6a59f',
+            type: 'metadata',
+            attributes: {
+                dataset: '03a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                application: 'aqueduct',
+                resource: {
                     type: 'dataset',
                     id: '03a8da41-d8d0-4095-8fd5-267a25d5fc31'
                 },
                 language: 'en',
-                name: 'GDP per capita (current US$)',
+                name: 'Name for Aqueduct in English',
+                description: 'GDP per capita is gross domestic product divided by midyear population. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current U.S. dollars.',
+                source: 'World Bank national accounts data, and OECD National Accounts data files.',
+                license: 'Open',
+                info: {
+                    dataDownload: 'http://api.worldbank.org/v2/en/indicator/NY.GDP.PCAP.CD?downloadformat=csv',
+                    organization: 'World Bank Group'
+                },
+                createdAt: '2017-01-20T13:59:49.788Z',
+                updatedAt: '2017-01-20T13:59:49.788Z',
+                status: 'published'
+            }
+        },
+        {
+            id: '588217d53d81e10b00e6a59f',
+            type: 'metadata',
+            attributes: {
+                dataset: '03a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                application: 'rw',
+                resource: {
+                    type: 'dataset',
+                    id: '03a8da41-d8d0-4095-8fd5-267a25d5fc31'
+                },
+                language: 'en',
+                name: 'Name for RW in English',
+                description: 'GDP per capita is gross domestic product divided by midyear population. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current U.S. dollars.',
+                source: 'World Bank national accounts data, and OECD National Accounts data files.',
+                license: 'Open',
+                info: {
+                    dataDownload: 'http://api.worldbank.org/v2/en/indicator/NY.GDP.PCAP.CD?downloadformat=csv',
+                    organization: 'World Bank Group'
+                },
+                createdAt: '2017-01-20T13:59:49.788Z',
+                updatedAt: '2017-01-20T13:59:49.788Z',
+                status: 'published'
+            }
+        },
+        {
+            id: '588217d53d81e10b00e6a59f',
+            type: 'metadata',
+            attributes: {
+                dataset: '03a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                application: 'gfw',
+                resource: {
+                    type: 'dataset',
+                    id: '03a8da41-d8d0-4095-8fd5-267a25d5fc31'
+                },
+                language: 'en',
+                name: 'Name for GFW in English',
+                description: 'GDP per capita is gross domestic product divided by midyear population. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current U.S. dollars.',
+                source: 'World Bank national accounts data, and OECD National Accounts data files.',
+                license: 'Open',
+                info: {
+                    dataDownload: 'http://api.worldbank.org/v2/en/indicator/NY.GDP.PCAP.CD?downloadformat=csv',
+                    organization: 'World Bank Group'
+                },
+                createdAt: '2017-01-20T13:59:49.788Z',
+                updatedAt: '2017-01-20T13:59:49.788Z',
+                status: 'published'
+            }
+        },
+        {
+            id: '588217d53d81e10b00e6a59f',
+            type: 'metadata',
+            attributes: {
+                dataset: '03a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                application: 'prep',
+                resource: {
+                    type: 'dataset',
+                    id: '03a8da41-d8d0-4095-8fd5-267a25d5fc31'
+                },
+                language: 'en',
+                name: 'Name for PREP in English',
                 description: 'GDP per capita is gross domestic product divided by midyear population. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current U.S. dollars.',
                 source: 'World Bank national accounts data, and OECD National Accounts data files.',
                 license: 'Open',
