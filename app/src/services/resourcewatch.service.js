@@ -128,7 +128,7 @@ class RWIndexService {
 
             const metadata = {
                 language: rwMetadata.language,
-                name: rwMetadata.name,
+                name: rwMetadata.name || dataset.name,
                 description: rwMetadata.description,
                 sourceOrganization,
                 dataSourceUrl: datasetPage,
@@ -158,7 +158,42 @@ class RWIndexService {
 
         } catch (err) {
             logger.error('Error obtaining metadata', err);
-            throw new Error('Error obtaining metadata');
+            throw new Error(`Error obtaining metadata: ${err}`);
+        }
+
+        if (!update) {
+            try {
+                const rwVocabularyResponse = await requestPromise({
+                    method: 'GET',
+                    url: `${config.resourcewatch.graph}`.replace(':dataset-id', dataset.tableName),
+                    json: true
+                });
+                logger.debug('RW graph vocabulary response', rwVocabularyResponse);
+
+                let rwVocabulary;
+                if (rwVocabularyResponse && rwVocabularyResponse.data && rwVocabularyResponse.data.length > 0) {
+                    rwVocabulary = rwVocabularyResponse.data[0].attributes.tags;
+                }
+
+                if (!rwVocabulary || rwVocabulary.length < 1) {
+                    return;
+                }
+
+                logger.debug('Tagging dataset for RW dataset', dataset.tableName);
+                await ctRegisterMicroservice.requestToMicroservice({
+                    method: 'POST',
+                    uri: `/dataset/${dataset.id}/vocabulary`,
+                    body: {
+                        knowledge_graph: {
+                            tags: rwVocabulary
+                        },
+                    },
+                    json: true
+                });
+            } catch (err) {
+                logger.error('Error tagging dataset', err);
+                throw new Error(`Error tagging dataset: ${err}`);
+            }
         }
     }
 

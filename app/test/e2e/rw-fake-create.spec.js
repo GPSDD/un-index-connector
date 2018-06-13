@@ -4,7 +4,6 @@ const should = chai.should();
 const {
     RW_FAKE_DATASET_CREATE_REQUEST,
 } = require('./test.constants');
-const config = require('config');
 const { getTestServer } = require('./test-server');
 
 const requester = getTestServer();
@@ -18,15 +17,27 @@ describe('E2E test', () => {
         nock('https://api.resourcewatch.org')
             .get(`/v1/dataset/${RW_FAKE_DATASET_CREATE_REQUEST.connector.tableName}?format=json`)
             .once()
-            .reply(404);
+            .reply(404, {
+                errors: [
+                    {
+                        status: 404,
+                        detail: `Dataset with id '${RW_FAKE_DATASET_CREATE_REQUEST.connector.tableName}' doesn't exist`
+                    }
+                ]
+            });
 
         // Metadata update request for fake dataset
         nock(`${process.env.CT_URL}`)
-            .patch(`/v1/dataset/${RW_FAKE_DATASET_CREATE_REQUEST.connector.id}`, {
-                dataset: {
-                    status: 2,
-                    errorMessage: 'Error - Error obtaining metadata'
-                }
+            .patch(`/v1/dataset/${RW_FAKE_DATASET_CREATE_REQUEST.connector.id}`, (request) => {
+                const expectedRequestContent = {
+                    dataset: {
+                        status: 2,
+                        errorMessage: `Error - Error obtaining metadata: StatusCodeError: 404 - {"errors":[{"status":404,"detail":"Dataset with id '${RW_FAKE_DATASET_CREATE_REQUEST.connector.tableName}' doesn't exist"}]}`
+                    }
+                };
+
+                request.should.deep.equal(expectedRequestContent);
+                return true;
             })
             .once()
             .reply(200);

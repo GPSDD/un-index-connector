@@ -13,6 +13,7 @@
     "resourcewatch": {
         "metadata": "https://api.resourcewatch.org/v1/dataset/:dataset-id/metadata?format=json",
         "dataset": "https://api.resourcewatch.org/v1/dataset/:dataset-id?format=json",
+        "graph": "https://api.resourcewatch.org/v1/dataset/:dataset-id/vocabulary/knowledge_graph",
         "dataSourceUrl": "https://data.resourcewatch.org/indicator/dataset-id",
         "dataSourceEndpoint": "https://api.resourcewatch.org/v1/download?sql=select%20*%20from%20:dataset-id"
     },

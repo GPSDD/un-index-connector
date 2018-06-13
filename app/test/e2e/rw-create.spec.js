@@ -4,9 +4,9 @@ const should = chai.should();
 const {
     RW_API_METADATA_RESPONSE,
     RW_DATASET_CREATE_REQUEST,
-    RW_API_DATASET_RESPONSE
+    RW_API_DATASET_RESPONSE,
+    RW_API_VOCABULARY_RESPONSE
 } = require('./test.constants');
-const config = require('config');
 const { getTestServer } = require('./test-server');
 
 const requester = getTestServer();
@@ -25,7 +25,33 @@ describe('E2E test', () => {
             .get(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.tableName}/metadata?format=json`)
             .times(6)
             .reply(200, RW_API_METADATA_RESPONSE);
+        nock('https://api.resourcewatch.org')
+            .get(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.tableName}/vocabulary/knowledge_graph`)
+            .times(6)
+            .reply(200, RW_API_VOCABULARY_RESPONSE);
 
+        nock(`${process.env.CT_URL}`)
+            .post(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
+                const expectedRequestBody = {
+                    knowledge_graph: {
+                        tags: [
+                            'daily',
+                            'vector',
+                            'near_real_time',
+                            'geospatial',
+                            'table',
+                            'global',
+                            'forest',
+                            'fire'
+                        ]
+                    },
+                };
+
+                body.should.deep.equal(expectedRequestBody);
+                return true;
+            })
+            .times(6)
+            .reply(200);
 
         // Metadata update request for real dataset
         nock(`${process.env.CT_URL}`)

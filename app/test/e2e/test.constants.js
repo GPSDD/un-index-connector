@@ -186,6 +186,29 @@ const RW_API_DATASET_RESPONSE = {
     }
 };
 
+const RW_API_VOCABULARY_RESPONSE = {
+    data: [
+        {
+            id: 'knowledge_graph',
+            type: 'vocabulary',
+            attributes: {
+                tags: [
+                    'daily',
+                    'vector',
+                    'near_real_time',
+                    'geospatial',
+                    'table',
+                    'global',
+                    'forest',
+                    'fire'
+                ],
+                name: 'knowledge_graph',
+                application: 'rw'
+            }
+        }
+    ]
+};
+
 const RW_API_METADATA_RESPONSE = {
     data: [
         {
@@ -340,5 +363,6 @@ module.exports = {
     RW_API_DATASET_RESPONSE,
     RW_API_METADATA_RESPONSE,
     RW_DATASET_CREATE_REQUEST,
-    RW_FAKE_DATASET_CREATE_REQUEST
+    RW_FAKE_DATASET_CREATE_REQUEST,
+    RW_API_VOCABULARY_RESPONSE
 };
