@@ -30,29 +30,6 @@ describe('E2E test', () => {
             .times(6)
             .reply(200, RW_API_VOCABULARY_RESPONSE);
 
-        nock(`${process.env.CT_URL}`)
-            .post(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
-                const expectedRequestBody = {
-                    knowledge_graph: {
-                        tags: [
-                            'daily',
-                            'vector',
-                            'near_real_time',
-                            'geospatial',
-                            'table',
-                            'global',
-                            'forest',
-                            'fire'
-                        ]
-                    },
-                };
-
-                body.should.deep.equal(expectedRequestBody);
-                return true;
-            })
-            .times(6)
-            .reply(200);
-
         // Metadata update request for real dataset
         nock(`${process.env.CT_URL}`)
             .patch(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}`, {
@@ -90,6 +67,32 @@ describe('E2E test', () => {
             .once()
             .reply(200);
 
+        nock(`${process.env.CT_URL}`)
+            .post(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
+                const expectedRequestBody = {
+                    knowledge_graph: {
+                        tags: [
+                            'daily',
+                            'vector',
+                            'near_real_time',
+                            'geospatial',
+                            'table',
+                            'global',
+                            'forest',
+                            'fire'
+                        ]
+                    },
+                    legacy: {
+                        tags: ['Resource Watch API']
+                    }
+                };
+
+                body.should.deep.equal(expectedRequestBody);
+                return true;
+            })
+            .once()
+            .reply(200);
+
         const response = await requester
             .post(`/api/v1/resourcewatch/rest-datasets/resourcewatch`)
             .send(RW_DATASET_CREATE_REQUEST);
@@ -118,6 +121,32 @@ describe('E2E test', () => {
                     info: {
                         dataDownload: 'http://api.worldbank.org/v2/en/indicator/NY.GDP.PCAP.CD?downloadformat=csv',
                         organization: 'World Bank Group'
+                    }
+                };
+
+                body.should.deep.equal(expectedRequestBody);
+                return true;
+            })
+            .once()
+            .reply(200);
+
+        nock(`${process.env.CT_URL}`)
+            .post(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
+                const expectedRequestBody = {
+                    knowledge_graph: {
+                        tags: [
+                            'daily',
+                            'vector',
+                            'near_real_time',
+                            'geospatial',
+                            'table',
+                            'global',
+                            'forest',
+                            'fire'
+                        ]
+                    },
+                    legacy: {
+                        tags: ['Resource Watch API', 'Aqueduct']
                     }
                 };
 
@@ -165,6 +194,32 @@ describe('E2E test', () => {
             .once()
             .reply(200);
 
+        nock(`${process.env.CT_URL}`)
+            .post(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
+                const expectedRequestBody = {
+                    knowledge_graph: {
+                        tags: [
+                            'daily',
+                            'vector',
+                            'near_real_time',
+                            'geospatial',
+                            'table',
+                            'global',
+                            'forest',
+                            'fire'
+                        ]
+                    },
+                    legacy: {
+                        tags: ['Resource Watch API', 'Aqueduct']
+                    }
+                };
+
+                body.should.deep.equal(expectedRequestBody);
+                return true;
+            })
+            .once()
+            .reply(200);
+
         const response = await requester
             .post(`/api/v1/resourcewatch/rest-datasets/resourcewatch`)
             .send(datasetRequest);
@@ -194,6 +249,32 @@ describe('E2E test', () => {
                     info: {
                         dataDownload: 'http://api.worldbank.org/v2/en/indicator/NY.GDP.PCAP.CD?downloadformat=csv',
                         organization: 'World Bank Group'
+                    }
+                };
+
+                body.should.deep.equal(expectedRequestBody);
+                return true;
+            })
+            .once()
+            .reply(200);
+
+        nock(`${process.env.CT_URL}`)
+            .post(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
+                const expectedRequestBody = {
+                    knowledge_graph: {
+                        tags: [
+                            'daily',
+                            'vector',
+                            'near_real_time',
+                            'geospatial',
+                            'table',
+                            'global',
+                            'forest',
+                            'fire'
+                        ]
+                    },
+                    legacy: {
+                        tags: ['Resource Watch API', 'PREP- Partnership for Resilience & Preparedness']
                     }
                 };
 
@@ -241,6 +322,32 @@ describe('E2E test', () => {
             .once()
             .reply(200);
 
+        nock(`${process.env.CT_URL}`)
+            .post(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
+                const expectedRequestBody = {
+                    knowledge_graph: {
+                        tags: [
+                            'daily',
+                            'vector',
+                            'near_real_time',
+                            'geospatial',
+                            'table',
+                            'global',
+                            'forest',
+                            'fire'
+                        ]
+                    },
+                    legacy: {
+                        tags: ['Resource Watch API', 'Resource Watch']
+                    }
+                };
+
+                body.should.deep.equal(expectedRequestBody);
+                return true;
+            })
+            .once()
+            .reply(200);
+
         const response = await requester
             .post(`/api/v1/resourcewatch/rest-datasets/resourcewatch`)
             .send(datasetRequest);
@@ -270,6 +377,32 @@ describe('E2E test', () => {
                     info: {
                         dataDownload: 'http://api.worldbank.org/v2/en/indicator/NY.GDP.PCAP.CD?downloadformat=csv',
                         organization: 'World Bank Group'
+                    }
+                };
+
+                body.should.deep.equal(expectedRequestBody);
+                return true;
+            })
+            .once()
+            .reply(200);
+
+        nock(`${process.env.CT_URL}`)
+            .post(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
+                const expectedRequestBody = {
+                    knowledge_graph: {
+                        tags: [
+                            'daily',
+                            'vector',
+                            'near_real_time',
+                            'geospatial',
+                            'table',
+                            'global',
+                            'forest',
+                            'fire'
+                        ]
+                    },
+                    legacy: {
+                        tags: ['Resource Watch API', 'Global Forest Watch']
                     }
                 };
 

@@ -52,6 +52,7 @@ class RWIndexService {
         logger.debug(`Obtaining metadata of indicator ${dataset.tableName}`);
 
         logger.debug('Obtaining dataset info and metadata of dataset ', `${config.resourcewatch.metadata}`.replace(':dataset-id', dataset.tableName));
+        let sourceOrganization;
         try {
             const rwDatasetResponse = await requestPromise({
                 method: 'GET',
@@ -92,7 +93,6 @@ class RWIndexService {
 
             const rwMetadata = rwMetadataList[0].attributes;
 
-            let sourceOrganization;
             const dataDownloadURL = config.resourcewatch.dataSourceEndpoint.replace(':dataset-id', rwMetadata.dataset);
             let datasetPage = dataDownloadURL;
 
@@ -175,19 +175,26 @@ class RWIndexService {
                     rwVocabulary = rwVocabularyResponse.data[0].attributes.tags;
                 }
 
-                if (!rwVocabulary || rwVocabulary.length < 1) {
-                    return;
+                const body = {
+                    legacy: {
+                        tags: ['Resource Watch API']
+                    }
+                };
+                if (rwVocabulary && rwVocabulary.length > 0) {
+                    body.knowledge_graph = {
+                        tags: rwVocabulary
+                    };
+                }
+
+                if (sourceOrganization && sourceOrganization !== 'Resource Watch API') {
+                    body.legacy.tags.push(sourceOrganization);
                 }
 
                 logger.debug('Tagging dataset for RW dataset', dataset.tableName);
                 await ctRegisterMicroservice.requestToMicroservice({
                     method: 'POST',
                     uri: `/dataset/${dataset.id}/vocabulary`,
-                    body: {
-                        knowledge_graph: {
-                            tags: rwVocabulary
-                        },
-                    },
+                    body,
                     json: true
                 });
             } catch (err) {
