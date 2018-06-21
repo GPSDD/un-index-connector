@@ -1,8 +1,7 @@
 # HDX Index Adapter
 
 
-This repository is the microservice that implements the HDX Index Adapter
-funcionality
+This repository is the microservice that implements the HDX Index Adapter functionality.
 
 1. [Getting Started](#getting-started)
 
