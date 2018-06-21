@@ -2,7 +2,7 @@ const nock = require('nock');
 const chai = require('chai');
 const should = chai.should();
 const {
-    RW_FAKE_DATASET_CREATE_REQUEST,
+    HDX_FAKE_DATASET_CREATE_REQUEST,
 } = require('./test.constants');
 const { getTestServer } = require('./test-server');
 
@@ -13,26 +13,26 @@ describe('E2E test', () => {
 
         nock.cleanAll();
 
-        // RW responses for info and metadata on fake dataset
-        nock('https://api.resourcewatch.org')
-            .get(`/v1/dataset/${RW_FAKE_DATASET_CREATE_REQUEST.connector.tableName}?format=json`)
+        // HDX responses for info and metadata on fake dataset
+        nock('https://api.hdx.org')
+            .get(`/v1/dataset/${HDX_FAKE_DATASET_CREATE_REQUEST.connector.tableName}?format=json`)
             .once()
             .reply(404, {
                 errors: [
                     {
                         status: 404,
-                        detail: `Dataset with id '${RW_FAKE_DATASET_CREATE_REQUEST.connector.tableName}' doesn't exist`
+                        detail: `Dataset with id '${HDX_FAKE_DATASET_CREATE_REQUEST.connector.tableName}' doesn't exist`
                     }
                 ]
             });
 
         // Metadata update request for fake dataset
         nock(`${process.env.CT_URL}`)
-            .patch(`/v1/dataset/${RW_FAKE_DATASET_CREATE_REQUEST.connector.id}`, (request) => {
+            .patch(`/v1/dataset/${HDX_FAKE_DATASET_CREATE_REQUEST.connector.id}`, (request) => {
                 const expectedRequestContent = {
                     dataset: {
                         status: 2,
-                        errorMessage: `Error - Error obtaining metadata: StatusCodeError: 404 - {"errors":[{"status":404,"detail":"Dataset with id '${RW_FAKE_DATASET_CREATE_REQUEST.connector.tableName}' doesn't exist"}]}`
+                        errorMessage: `Error - Error obtaining metadata: StatusCodeError: 404 - {"errors":[{"status":404,"detail":"Dataset with id '${HDX_FAKE_DATASET_CREATE_REQUEST.connector.tableName}' doesn't exist"}]}`
                     }
                 };
 
@@ -45,8 +45,8 @@ describe('E2E test', () => {
 
     it('Create a dataset for an dataset that doesn\'t exist should return an error', async () => {
         const response = await requester
-            .post(`/api/v1/resourcewatch/rest-datasets/resourcewatch`)
-            .send(RW_FAKE_DATASET_CREATE_REQUEST);
+            .post(`/api/v1/hdx/rest-datasets/hdx`)
+            .send(HDX_FAKE_DATASET_CREATE_REQUEST);
         response.status.should.equal(200);
     });
 

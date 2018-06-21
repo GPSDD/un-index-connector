@@ -2,10 +2,10 @@ const nock = require('nock');
 const chai = require('chai');
 const should = chai.should();
 const {
-    RW_API_METADATA_RESPONSE,
-    RW_DATASET_CREATE_REQUEST,
-    RW_API_DATASET_RESPONSE,
-    RW_API_VOCABULARY_RESPONSE
+    HDX_API_METADATA_RESPONSE,
+    HDX_DATASET_CREATE_REQUEST,
+    HDX_API_DATASET_RESPONSE,
+    HDX_API_VOCABULARY_RESPONSE
 } = require('./test.constants');
 const { getTestServer } = require('./test-server');
 
@@ -16,23 +16,23 @@ describe('E2E test', () => {
 
         nock.cleanAll();
 
-        // RW responses for info and metadata on real dataset
-        nock('https://api.resourcewatch.org')
-            .get(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.tableName}?format=json`)
+        // HDX responses for info and metadata on real dataset
+        nock('https://api.hdx.org')
+            .get(`/v1/dataset/${HDX_DATASET_CREATE_REQUEST.connector.tableName}?format=json`)
             .times(6)
-            .reply(200, RW_API_DATASET_RESPONSE);
-        nock('https://api.resourcewatch.org')
-            .get(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.tableName}/metadata?format=json`)
+            .reply(200, HDX_API_DATASET_RESPONSE);
+        nock('https://api.hdx.org')
+            .get(`/v1/dataset/${HDX_DATASET_CREATE_REQUEST.connector.tableName}/metadata?format=json`)
             .times(6)
-            .reply(200, RW_API_METADATA_RESPONSE);
-        nock('https://api.resourcewatch.org')
-            .get(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.tableName}/vocabulary/knowledge_graph`)
+            .reply(200, HDX_API_METADATA_RESPONSE);
+        nock('https://api.hdx.org')
+            .get(`/v1/dataset/${HDX_DATASET_CREATE_REQUEST.connector.tableName}/vocabulary/knowledge_graph`)
             .times(6)
-            .reply(200, RW_API_VOCABULARY_RESPONSE);
+            .reply(200, HDX_API_VOCABULARY_RESPONSE);
 
         // Metadata update request for real dataset
         nock(`${process.env.CT_URL}`)
-            .patch(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}`, {
+            .patch(`/v1/dataset/${HDX_DATASET_CREATE_REQUEST.connector.id}`, {
                 dataset: {
                     status: 1
                 }
@@ -43,15 +43,15 @@ describe('E2E test', () => {
 
     it('Create dataset with no language and no app should be successful and use the first metadata', async () => {
         nock(`${process.env.CT_URL}`)
-            .post(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}/metadata`, (body) => {
+            .post(`/v1/dataset/${HDX_DATASET_CREATE_REQUEST.connector.id}/metadata`, (body) => {
                 const expectedRequestBody = {
                     language: 'es',
-                    name: 'Name for RW in Spanish',
+                    name: 'Name for HDX in Spanish',
                     description: 'GDP per capita is gross domestic product divided by midyear population. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current U.S. dollars.',
-                    sourceOrganization: 'Resource Watch API',
-                    dataSourceUrl: 'https://api.resourcewatch.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
-                    dataSourceEndpoint: 'https://api.resourcewatch.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
-                    dataDownloadUrl: 'https://api.resourcewatch.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                    sourceOrganization: 'HDX API',
+                    dataSourceUrl: 'https://api.hdx.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                    dataSourceEndpoint: 'https://api.hdx.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                    dataDownloadUrl: 'https://api.hdx.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
                     status: 'published',
                     license: 'Other',
                     userId: '1a10d7c6e0a37126611fd7a7',
@@ -68,7 +68,7 @@ describe('E2E test', () => {
             .reply(200);
 
         nock(`${process.env.CT_URL}`)
-            .post(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
+            .post(`/v1/dataset/${HDX_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
                 const expectedRequestBody = {
                     knowledge_graph: {
                         tags: [
@@ -83,7 +83,7 @@ describe('E2E test', () => {
                         ]
                     },
                     legacy: {
-                        tags: ['Resource Watch API']
+                        tags: ['HDX API']
                     }
                 };
 
@@ -94,27 +94,27 @@ describe('E2E test', () => {
             .reply(200);
 
         const response = await requester
-            .post(`/api/v1/resourcewatch/rest-datasets/resourcewatch`)
-            .send(RW_DATASET_CREATE_REQUEST);
+            .post(`/api/v1/hdx/rest-datasets/hdx`)
+            .send(HDX_DATASET_CREATE_REQUEST);
 
         response.status.should.equal(200);
     });
 
     it('Create dataset from Aqueduct/no language should be successful', async () => {
-        const datasetRequest = Object.assign({}, RW_DATASET_CREATE_REQUEST);
+        const datasetRequest = Object.assign({}, HDX_DATASET_CREATE_REQUEST);
         datasetRequest.connector.sourceApplication = 'aqueduct';
 
         // Metadata creation request for Aqueduct/<no language>
         nock(`${process.env.CT_URL}`)
-            .post(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}/metadata`, (body) => {
+            .post(`/v1/dataset/${HDX_DATASET_CREATE_REQUEST.connector.id}/metadata`, (body) => {
                 const expectedRequestBody = {
                     language: 'es',
                     name: 'Name for Aqueduct in Spanish',
                     description: 'GDP per capita is gross domestic product divided by midyear population. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current U.S. dollars.',
                     sourceOrganization: 'Aqueduct',
-                    dataSourceUrl: 'https://api.resourcewatch.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
-                    dataSourceEndpoint: 'https://api.resourcewatch.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
-                    dataDownloadUrl: 'https://api.resourcewatch.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                    dataSourceUrl: 'https://api.hdx.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                    dataSourceEndpoint: 'https://api.hdx.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                    dataDownloadUrl: 'https://api.hdx.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
                     status: 'published',
                     license: 'Other',
                     userId: '1a10d7c6e0a37126611fd7a7',
@@ -131,7 +131,7 @@ describe('E2E test', () => {
             .reply(200);
 
         nock(`${process.env.CT_URL}`)
-            .post(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
+            .post(`/v1/dataset/${HDX_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
                 const expectedRequestBody = {
                     knowledge_graph: {
                         tags: [
@@ -146,7 +146,7 @@ describe('E2E test', () => {
                         ]
                     },
                     legacy: {
-                        tags: ['Resource Watch API', 'Aqueduct']
+                        tags: ['HDX API', 'Aqueduct']
                     }
                 };
 
@@ -157,28 +157,28 @@ describe('E2E test', () => {
             .reply(200);
 
         const response = await requester
-            .post(`/api/v1/resourcewatch/rest-datasets/resourcewatch`)
+            .post(`/api/v1/hdx/rest-datasets/hdx`)
             .send(datasetRequest);
 
         response.status.should.equal(200);
     });
 
     it('Create dataset from Aqueduct/English should be successful', async () => {
-        const datasetRequest = Object.assign({}, RW_DATASET_CREATE_REQUEST);
+        const datasetRequest = Object.assign({}, HDX_DATASET_CREATE_REQUEST);
         datasetRequest.connector.sourceApplication = 'aqueduct';
         datasetRequest.connector.sourceLanguage = 'en';
 
         // Metadata creation request for Aqueduct/<no language>
         nock(`${process.env.CT_URL}`)
-            .post(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}/metadata`, (body) => {
+            .post(`/v1/dataset/${HDX_DATASET_CREATE_REQUEST.connector.id}/metadata`, (body) => {
                 const expectedRequestBody = {
                     language: 'en',
                     name: 'Name for Aqueduct in English',
                     description: 'GDP per capita is gross domestic product divided by midyear population. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current U.S. dollars.',
                     sourceOrganization: 'Aqueduct',
-                    dataSourceUrl: 'https://api.resourcewatch.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
-                    dataSourceEndpoint: 'https://api.resourcewatch.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
-                    dataDownloadUrl: 'https://api.resourcewatch.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                    dataSourceUrl: 'https://api.hdx.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                    dataSourceEndpoint: 'https://api.hdx.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                    dataDownloadUrl: 'https://api.hdx.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
                     status: 'published',
                     license: 'Other',
                     userId: '1a10d7c6e0a37126611fd7a7',
@@ -195,7 +195,7 @@ describe('E2E test', () => {
             .reply(200);
 
         nock(`${process.env.CT_URL}`)
-            .post(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
+            .post(`/v1/dataset/${HDX_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
                 const expectedRequestBody = {
                     knowledge_graph: {
                         tags: [
@@ -210,7 +210,7 @@ describe('E2E test', () => {
                         ]
                     },
                     legacy: {
-                        tags: ['Resource Watch API', 'Aqueduct']
+                        tags: ['HDX API', 'Aqueduct']
                     }
                 };
 
@@ -221,28 +221,28 @@ describe('E2E test', () => {
             .reply(200);
 
         const response = await requester
-            .post(`/api/v1/resourcewatch/rest-datasets/resourcewatch`)
+            .post(`/api/v1/hdx/rest-datasets/hdx`)
             .send(datasetRequest);
 
         response.status.should.equal(200);
     });
 
     it('Create dataset from PREP/English should be successful', async () => {
-        const datasetRequest = Object.assign({}, RW_DATASET_CREATE_REQUEST);
+        const datasetRequest = Object.assign({}, HDX_DATASET_CREATE_REQUEST);
         datasetRequest.connector.sourceApplication = 'prep';
         datasetRequest.connector.sourceLanguage = 'en';
 
         // Metadata creation request for Aqueduct/<no language>
         nock(`${process.env.CT_URL}`)
-            .post(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}/metadata`, (body) => {
+            .post(`/v1/dataset/${HDX_DATASET_CREATE_REQUEST.connector.id}/metadata`, (body) => {
                 const expectedRequestBody = {
                     language: 'en',
                     name: 'Name for PREP in English',
                     description: 'GDP per capita is gross domestic product divided by midyear population. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current U.S. dollars.',
                     sourceOrganization: 'PREP- Partnership for Resilience & Preparedness',
                     dataSourceUrl: 'https://www.prepdata.org/dataset/GDP-per-capita-current-USdollar-1490086842131',
-                    dataSourceEndpoint: 'https://api.resourcewatch.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
-                    dataDownloadUrl: 'https://api.resourcewatch.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                    dataSourceEndpoint: 'https://api.hdx.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                    dataDownloadUrl: 'https://api.hdx.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
                     status: 'published',
                     license: 'Other',
                     userId: '1a10d7c6e0a37126611fd7a7',
@@ -259,7 +259,7 @@ describe('E2E test', () => {
             .reply(200);
 
         nock(`${process.env.CT_URL}`)
-            .post(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
+            .post(`/v1/dataset/${HDX_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
                 const expectedRequestBody = {
                     knowledge_graph: {
                         tags: [
@@ -274,7 +274,7 @@ describe('E2E test', () => {
                         ]
                     },
                     legacy: {
-                        tags: ['Resource Watch API', 'PREP- Partnership for Resilience & Preparedness']
+                        tags: ['HDX API', 'PREP- Partnership for Resilience & Preparedness']
                     }
                 };
 
@@ -285,28 +285,28 @@ describe('E2E test', () => {
             .reply(200);
 
         const response = await requester
-            .post(`/api/v1/resourcewatch/rest-datasets/resourcewatch`)
+            .post(`/api/v1/hdx/rest-datasets/hdx`)
             .send(datasetRequest);
 
         response.status.should.equal(200);
     });
 
-    it('Create dataset from RW/English should be successful', async () => {
-        const datasetRequest = Object.assign({}, RW_DATASET_CREATE_REQUEST);
-        datasetRequest.connector.sourceApplication = 'rw';
+    it('Create dataset from HDX/English should be successful', async () => {
+        const datasetRequest = Object.assign({}, HDX_DATASET_CREATE_REQUEST);
+        datasetRequest.connector.sourceApplication = 'hdx';
         datasetRequest.connector.sourceLanguage = 'en';
 
         // Metadata creation request for Aqueduct/<no language>
         nock(`${process.env.CT_URL}`)
-            .post(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}/metadata`, (body) => {
+            .post(`/v1/dataset/${HDX_DATASET_CREATE_REQUEST.connector.id}/metadata`, (body) => {
                 const expectedRequestBody = {
                     language: 'en',
-                    name: 'Name for RW in English',
+                    name: 'Name for HDX in English',
                     description: 'GDP per capita is gross domestic product divided by midyear population. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current U.S. dollars.',
-                    sourceOrganization: 'Resource Watch',
-                    dataSourceUrl: 'https://resourcewatch.org/data/explore/GDP-per-capita-current-USdollar-1490086842131',
-                    dataSourceEndpoint: 'https://api.resourcewatch.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
-                    dataDownloadUrl: 'https://api.resourcewatch.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                    sourceOrganization: 'HDX',
+                    dataSourceUrl: 'https://hdx.org/data/explore/GDP-per-capita-current-USdollar-1490086842131',
+                    dataSourceEndpoint: 'https://api.hdx.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                    dataDownloadUrl: 'https://api.hdx.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
                     status: 'published',
                     license: 'Other',
                     userId: '1a10d7c6e0a37126611fd7a7',
@@ -323,7 +323,7 @@ describe('E2E test', () => {
             .reply(200);
 
         nock(`${process.env.CT_URL}`)
-            .post(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
+            .post(`/v1/dataset/${HDX_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
                 const expectedRequestBody = {
                     knowledge_graph: {
                         tags: [
@@ -338,7 +338,7 @@ describe('E2E test', () => {
                         ]
                     },
                     legacy: {
-                        tags: ['Resource Watch API', 'Resource Watch']
+                        tags: ['HDX API', 'HDX']
                     }
                 };
 
@@ -349,28 +349,28 @@ describe('E2E test', () => {
             .reply(200);
 
         const response = await requester
-            .post(`/api/v1/resourcewatch/rest-datasets/resourcewatch`)
+            .post(`/api/v1/hdx/rest-datasets/hdx`)
             .send(datasetRequest);
 
         response.status.should.equal(200);
     });
 
     it('Create dataset from GFW/English should be successful', async () => {
-        const datasetRequest = Object.assign({}, RW_DATASET_CREATE_REQUEST);
+        const datasetRequest = Object.assign({}, HDX_DATASET_CREATE_REQUEST);
         datasetRequest.connector.sourceApplication = 'gfw';
         datasetRequest.connector.sourceLanguage = 'en';
 
         // Metadata creation request for Aqueduct/<no language>
         nock(`${process.env.CT_URL}`)
-            .post(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}/metadata`, (body) => {
+            .post(`/v1/dataset/${HDX_DATASET_CREATE_REQUEST.connector.id}/metadata`, (body) => {
                 const expectedRequestBody = {
                     language: 'en',
                     name: 'Name for GFW in English',
                     description: 'GDP per capita is gross domestic product divided by midyear population. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current U.S. dollars.',
                     sourceOrganization: 'Global Forest Watch',
-                    dataSourceUrl: 'https://api.resourcewatch.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
-                    dataSourceEndpoint: 'https://api.resourcewatch.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
-                    dataDownloadUrl: 'https://api.resourcewatch.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                    dataSourceUrl: 'https://api.hdx.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                    dataSourceEndpoint: 'https://api.hdx.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
+                    dataDownloadUrl: 'https://api.hdx.org/v1/download?sql=select%20*%20from%2003a8da41-d8d0-4095-8fd5-267a25d5fc31',
                     status: 'published',
                     license: 'Other',
                     userId: '1a10d7c6e0a37126611fd7a7',
@@ -387,7 +387,7 @@ describe('E2E test', () => {
             .reply(200);
 
         nock(`${process.env.CT_URL}`)
-            .post(`/v1/dataset/${RW_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
+            .post(`/v1/dataset/${HDX_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
                 const expectedRequestBody = {
                     knowledge_graph: {
                         tags: [
@@ -402,7 +402,7 @@ describe('E2E test', () => {
                         ]
                     },
                     legacy: {
-                        tags: ['Resource Watch API', 'Global Forest Watch']
+                        tags: ['HDX API', 'Global Forest Watch']
                     }
                 };
 
@@ -413,7 +413,7 @@ describe('E2E test', () => {
             .reply(200);
 
         const response = await requester
-            .post(`/api/v1/resourcewatch/rest-datasets/resourcewatch`)
+            .post(`/api/v1/hdx/rest-datasets/hdx`)
             .send(datasetRequest);
 
         response.status.should.equal(200);

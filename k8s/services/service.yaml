@@ -6,6 +6,6 @@ metadata:
   name: {name}
 spec:
   ports:
-    - port: 3011
+    - port: 3012
   selector:
     name: {name}

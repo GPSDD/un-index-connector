@@ -1,6 +1,6 @@
 {
     "logger": {
-        "name": "3011",
+        "name": "3012",
         "level": "debug",
         "toFile": false,
         "dirLogFile": null

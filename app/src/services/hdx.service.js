@@ -20,7 +20,7 @@ const ACCEPTED_LICENSE_STRINGS = [
     'Other'
 ];
 
-class RWIndexService {
+class HDXIndexService {
 
     static async cronUpdate() {
         try {
@@ -28,7 +28,7 @@ class RWIndexService {
             logger.debug('Obtaining datasets');
             const datasets = await ctRegisterMicroservice.requestToMicroservice({
                 method: 'GET',
-                uri: `/dataset?provider=resourcewatch&page[size]=99999&status=saved`,
+                uri: `/dataset?provider=hdx&page[size]=99999&status=saved`,
                 json: true
             });
             if (datasets && datasets.data) {
@@ -36,7 +36,7 @@ class RWIndexService {
                     try {
                         const dataset = datasets.data[i].attributes;
                         dataset.id = datasets.data[i].id;
-                        await RWIndexService.register(dataset, dataset.userId, true);
+                        await HDXIndexService.register(dataset, dataset.userId, true);
                     } catch (err) {
                         logger.error('Error updating dataset', err);
                     }
@@ -51,15 +51,15 @@ class RWIndexService {
     static async register(dataset, userId, update = false) {
         logger.debug(`Obtaining metadata of indicator ${dataset.tableName}`);
 
-        logger.debug('Obtaining dataset info and metadata of dataset ', `${config.resourcewatch.metadata}`.replace(':dataset-id', dataset.tableName));
+        logger.debug('Obtaining dataset info and metadata of dataset ', `${config.hdx.metadata}`.replace(':dataset-id', dataset.tableName));
         let sourceOrganization;
         try {
             const rwDatasetResponse = await requestPromise({
                 method: 'GET',
-                url: `${config.resourcewatch.dataset}`.replace(':dataset-id', dataset.tableName),
+                url: `${config.hdx.dataset}`.replace(':dataset-id', dataset.tableName),
                 json: true
             });
-            logger.debug('RW dataset response', rwDatasetResponse);
+            logger.debug('HDX dataset response', rwDatasetResponse);
 
             let rwDataset;
             if (rwDatasetResponse && rwDatasetResponse.data && rwDatasetResponse.data.attributes) {
@@ -68,10 +68,10 @@ class RWIndexService {
 
             const rwMetadataResponse = await requestPromise({
                 method: 'GET',
-                url: `${config.resourcewatch.metadata}`.replace(':dataset-id', dataset.tableName),
+                url: `${config.hdx.metadata}`.replace(':dataset-id', dataset.tableName),
                 json: true
             });
-            logger.debug('RW metadata response', rwMetadataResponse);
+            logger.debug('HDX metadata response', rwMetadataResponse);
 
             if (!rwMetadataResponse || !rwMetadataResponse.data || rwMetadataResponse.data.length === 0) {
                 throw new Error('Dataset metadata response format not valid');
@@ -93,7 +93,7 @@ class RWIndexService {
 
             const rwMetadata = rwMetadataList[0].attributes;
 
-            const dataDownloadURL = config.resourcewatch.dataSourceEndpoint.replace(':dataset-id', rwMetadata.dataset);
+            const dataDownloadURL = config.hdx.dataSourceEndpoint.replace(':dataset-id', rwMetadata.dataset);
             let datasetPage = dataDownloadURL;
 
             switch (rwMetadata.application) {
@@ -114,14 +114,14 @@ class RWIndexService {
                     sourceOrganization = 'Aqueduct';
                     break;
                 case 'forest-atlas':
-                case 'rw':
-                    sourceOrganization = 'Resource Watch';
+                case 'hdx':
+                    sourceOrganization = 'HDX';
                     if (rwDataset) {
-                        datasetPage = `https://resourcewatch.org/data/explore/${rwDataset.slug}`;
+                        datasetPage = `https://hdx.org/data/explore/${rwDataset.slug}`;
                     }
                     break;
                 default:
-                    sourceOrganization = 'Resource Watch API';
+                    sourceOrganization = 'HDX API';
                     break;
 
             }
@@ -165,10 +165,10 @@ class RWIndexService {
             try {
                 const rwVocabularyResponse = await requestPromise({
                     method: 'GET',
-                    url: `${config.resourcewatch.graph}`.replace(':dataset-id', dataset.tableName),
+                    url: `${config.hdx.graph}`.replace(':dataset-id', dataset.tableName),
                     json: true
                 });
-                logger.debug('RW graph vocabulary response', rwVocabularyResponse);
+                logger.debug('HDX graph vocabulary response', rwVocabularyResponse);
 
                 let rwVocabulary;
                 if (rwVocabularyResponse && rwVocabularyResponse.data && rwVocabularyResponse.data.length > 0) {
@@ -177,7 +177,7 @@ class RWIndexService {
 
                 const body = {
                     legacy: {
-                        tags: ['Resource Watch API']
+                        tags: ['HDX API']
                     }
                 };
                 if (rwVocabulary && rwVocabulary.length > 0) {
@@ -186,11 +186,11 @@ class RWIndexService {
                     };
                 }
 
-                if (sourceOrganization && sourceOrganization !== 'Resource Watch API') {
+                if (sourceOrganization && sourceOrganization !== 'HDX API') {
                     body.legacy.tags.push(sourceOrganization);
                 }
 
-                logger.debug('Tagging dataset for RW dataset', dataset.tableName);
+                logger.debug('Tagging dataset for HDX dataset', dataset.tableName);
                 await ctRegisterMicroservice.requestToMicroservice({
                     method: 'POST',
                     uri: `/dataset/${dataset.id}/vocabulary`,
@@ -206,4 +206,4 @@ class RWIndexService {
 
 }
 
-module.exports = RWIndexService;
+module.exports = HDXIndexService;

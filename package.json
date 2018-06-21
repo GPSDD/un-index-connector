@@ -1,10 +1,10 @@
 {
-  "name": "resourcewatch-adapter",
+  "name": "hdx-adapter",
   "version": "1.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "CT_URL=http://mymachine:9000 LOCAL_URL=http://mymachine:3011 NODE_PATH=app/src PORT=3011 node ./node_modules/.bin/grunt --gruntfile app/Gruntfile.js",
+    "dev": "CT_URL=http://mymachine:9000 LOCAL_URL=http://mymachine:3012 NODE_PATH=app/src PORT=3012 node ./node_modules/.bin/grunt --gruntfile app/Gruntfile.js",
     "start": "NODE_PATH=app/src node $NODE_DEBUG_OPTION app/index.js",
     "test": "NODE_PATH=app/src node $NODE_DEBUG_OPTION ./node_modules/.bin/grunt --gruntfile app/Gruntfile.js e2eTest",
     "coverage": "NODE_PATH=app/src node $NODE_DEBUG_OPTION ./node_modules/.bin/grunt --gruntfile app/Gruntfile.js e2eTestCoverage",

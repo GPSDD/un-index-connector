@@ -1,7 +1,7 @@
 prod:
-  image: vizzuality/resource-watch-index-adapter:1.2.0${STAGING}
+  image: vizzuality/hdx-index-adapter:1.2.0${STAGING}
   ports:
-    - "3011"
+    - "3012"
   env_file:
     - prod.env
   command: start
@@ -10,4 +10,4 @@ prod:
   log_driver: "syslog"
   log_opt:
       syslog-address: ${SYSLOG_ADDRESS}
-      tag: resource-watch-index-adapter${STAGING}
+      tag: hdx-index-adapter${STAGING}

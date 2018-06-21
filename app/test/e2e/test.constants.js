@@ -6,7 +6,7 @@ const ROLES = {
         email: 'user@control-tower.org',
         extraUserData: {
             apps: [
-                'rw',
+                'hdx',
                 'gfw',
                 'gfw-climate',
                 'prep',
@@ -23,7 +23,7 @@ const ROLES = {
         email: 'user@control-tower.org',
         extraUserData: {
             apps: [
-                'rw',
+                'hdx',
                 'gfw',
                 'gfw-climate',
                 'prep',
@@ -40,7 +40,7 @@ const ROLES = {
         email: 'user@control-tower.org',
         extraUserData: {
             apps: [
-                'rw',
+                'hdx',
                 'gfw',
                 'gfw-climate',
                 'prep',
@@ -52,13 +52,13 @@ const ROLES = {
     }
 };
 
-const RW_DATASET_CREATE_REQUEST = {
+const HDX_DATASET_CREATE_REQUEST = {
     connector: {
         __v: 0,
         name: 'Seasonal variability',
         slug: 'Seasonal-variability_17',
         connectorType: 'rest',
-        provider: 'resourcewatch',
+        provider: 'hdx',
         userId: '1a10d7c6e0a37126611fd7a7',
         updatedAt: '2018-06-01T11:04:47.231Z',
         createdAt: '2018-06-01T11:04:47.231Z',
@@ -78,7 +78,7 @@ const RW_DATASET_CREATE_REQUEST = {
         verified: false,
         overwrite: false,
         status: 'pending',
-        tableName: 'real-rw-dataset-id',
+        tableName: 'real-hdx-dataset-id',
         connectorUrl: null,
         attributesPath: null,
         dataPath: null,
@@ -89,7 +89,7 @@ const RW_DATASET_CREATE_REQUEST = {
         connector_url: null,
         attributes_path: null,
         data_path: null,
-        table_name: 'real-rw-dataset-id'
+        table_name: 'real-hdx-dataset-id'
     },
     userId: '1a10d7c6e0a37126611fd7a7',
     loggedUser: {
@@ -97,7 +97,7 @@ const RW_DATASET_CREATE_REQUEST = {
     }
 };
 
-const RW_FAKE_DATASET_CREATE_REQUEST = {
+const HDX_FAKE_DATASET_CREATE_REQUEST = {
     connector: {
         __v: 0,
         name: 'Fake dataset',
@@ -142,7 +142,7 @@ const RW_FAKE_DATASET_CREATE_REQUEST = {
     }
 };
 
-const RW_API_DATASET_RESPONSE = {
+const HDX_API_DATASET_RESPONSE = {
     data: {
         id: '03a8da41-d8d0-4095-8fd5-267a25d5fc31',
         type: 'dataset',
@@ -186,7 +186,7 @@ const RW_API_DATASET_RESPONSE = {
     }
 };
 
-const RW_API_VOCABULARY_RESPONSE = {
+const HDX_API_VOCABULARY_RESPONSE = {
     data: [
         {
             id: 'knowledge_graph',
@@ -203,13 +203,13 @@ const RW_API_VOCABULARY_RESPONSE = {
                     'fire'
                 ],
                 name: 'knowledge_graph',
-                application: 'rw'
+                application: 'hdx'
             }
         }
     ]
 };
 
-const RW_API_METADATA_RESPONSE = {
+const HDX_API_METADATA_RESPONSE = {
     data: [
         {
             id: '588217d53d81e10b00e6a59f',
@@ -218,11 +218,11 @@ const RW_API_METADATA_RESPONSE = {
                 dataset: '03a8da41-d8d0-4095-8fd5-267a25d5fc31',
                 application: 'data4sdgs',
                 resource: {
-                    type: 'rw',
+                    type: 'hdx',
                     id: '03a8da41-d8d0-4095-8fd5-267a25d5fc31'
                 },
                 language: 'es',
-                name: 'Name for RW in Spanish',
+                name: 'Name for HDX in Spanish',
                 description: 'GDP per capita is gross domestic product divided by midyear population. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current U.S. dollars.',
                 source: 'World Bank national accounts data, and OECD National Accounts data files.',
                 license: 'Open',
@@ -288,13 +288,13 @@ const RW_API_METADATA_RESPONSE = {
             type: 'metadata',
             attributes: {
                 dataset: '03a8da41-d8d0-4095-8fd5-267a25d5fc31',
-                application: 'rw',
+                application: 'hdx',
                 resource: {
                     type: 'dataset',
                     id: '03a8da41-d8d0-4095-8fd5-267a25d5fc31'
                 },
                 language: 'en',
-                name: 'Name for RW in English',
+                name: 'Name for HDX in English',
                 description: 'GDP per capita is gross domestic product divided by midyear population. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current U.S. dollars.',
                 source: 'World Bank national accounts data, and OECD National Accounts data files.',
                 license: 'Open',
@@ -360,9 +360,9 @@ const RW_API_METADATA_RESPONSE = {
 
 module.exports = {
     ROLES,
-    RW_API_DATASET_RESPONSE,
-    RW_API_METADATA_RESPONSE,
-    RW_DATASET_CREATE_REQUEST,
-    RW_FAKE_DATASET_CREATE_REQUEST,
-    RW_API_VOCABULARY_RESPONSE
+    HDX_API_DATASET_RESPONSE,
+    HDX_API_METADATA_RESPONSE,
+    HDX_DATASET_CREATE_REQUEST,
+    HDX_FAKE_DATASET_CREATE_REQUEST,
+    HDX_API_VOCABULARY_RESPONSE
 };

@@ -1,15 +1,15 @@
 {
-	"name": "Resource Watch Index Adapter",
-	"cache": ["index-rw"],
-	"uncache": ["index-rw"],
-	"tags": ["rw"],
+	"name": "HDX Index Adapter",
+	"cache": ["index-hdx"],
+	"uncache": ["index-hdx"],
+	"tags": ["hdx"],
 	"endpoints": [{
 		"path": "/v1/query/:dataset",
 		"method": "GET",
 		"binary": true,
 		"redirect": {
 			"method": "POST",
-			"path": "/api/v1/resourcewatch/query/:dataset"
+			"path": "/api/v1/hdx/query/:dataset"
 		},
 		"filters": [{
 			"name": "dataset",
@@ -21,7 +21,7 @@
 			"compare": {
 				"data": {
 					"attributes": {
-						"provider": "resourcewatch"
+						"provider": "hdx"
 					}
 				}
 			}
@@ -32,7 +32,7 @@
 		"binary": true,
 		"redirect": {
 			"method": "POST",
-			"path": "/api/v1/resourcewatch/query/:dataset"
+			"path": "/api/v1/hdx/query/:dataset"
 		},
 		"filters": [{
 			"name": "dataset",
@@ -44,7 +44,7 @@
 			"compare": {
 				"data": {
 					"attributes": {
-						"provider": "resourcewatch"
+						"provider": "hdx"
 					}
 				}
 			}
@@ -55,7 +55,7 @@
 		"binary": true,
 		"redirect": {
 			"method": "POST",
-			"path": "/api/v1/resourcewatch/download/:dataset"
+			"path": "/api/v1/hdx/download/:dataset"
 		},
 		"filters": [{
 			"name": "dataset",
@@ -67,7 +67,7 @@
 			"compare": {
 				"data": {
 					"attributes": {
-						"provider": "resourcewatch"
+						"provider": "hdx"
 					}
 				}
 			}
@@ -78,7 +78,7 @@
 		"binary": true,
 		"redirect": {
 			"method": "POST",
-			"path": "/api/v1/resourcewatch/download/:dataset"
+			"path": "/api/v1/hdx/download/:dataset"
 		},
 		"filters": [{
 			"name": "dataset",
@@ -90,7 +90,7 @@
 			"compare": {
 				"data": {
 					"attributes": {
-						"provider": "resourcewatch"
+						"provider": "hdx"
 					}
 				}
 			}
@@ -100,7 +100,7 @@
 		"method": "GET",
 		"redirect": {
 			"method": "POST",
-			"path": "/api/v1/resourcewatch/fields/:dataset"
+			"path": "/api/v1/hdx/fields/:dataset"
 		},
 		"filters": [{
 			"name": "dataset",
@@ -112,17 +112,17 @@
 			"compare": {
 				"data": {
 					"attributes": {
-						"provider": "resourcewatch"
+						"provider": "hdx"
 					}
 				}
 			}
 		}]
 	}, {
-		"path": "/v1/rest-datasets/resourcewatch",
+		"path": "/v1/rest-datasets/hdx",
 		"method": "POST",
 		"redirect": {
 			"method": "POST",
-			"path": "/api/v1/resourcewatch/rest-datasets/resourcewatch"
+			"path": "/api/v1/hdx/rest-datasets/hdx"
 		}
 	}]
 }

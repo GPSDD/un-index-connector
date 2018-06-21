@@ -1,9 +1,9 @@
 base:
   build: .
   ports:
-    - "3011:3011"
-  container_name: resource-watch-index-adapter
+    - "3012:3012"
+  container_name: hdx-index-adapter
   environment:
-    PORT: 3011
+    PORT: 3012
     NODE_PATH: app/src
 

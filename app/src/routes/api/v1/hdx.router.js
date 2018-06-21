@@ -1,14 +1,14 @@
 const Router = require('koa-router');
 const logger = require('logger');
 const ctRegisterMicroservice = require('ct-register-microservice-node');
-const RWIndexService = require('services/resourcewatch.service');
+const RWIndexService = require('services/hdx.service');
 const FieldSerializer = require('serializers/field.serializer');
 
 const router = new Router({
-    prefix: '/resourcewatch',
+    prefix: '/hdx',
 });
 
-class RWIndexRouter {
+class HDXIndexRouter {
 
     static async dataAccessNotSupported(ctx) {
         ctx.set('Content-type', 'application/json');
@@ -64,9 +64,9 @@ class RWIndexRouter {
 
 }
 
-router.post('/query/:dataset', RWIndexRouter.dataAccessNotSupported);
-router.post('/download/:dataset', RWIndexRouter.dataAccessNotSupported);
-router.post('/fields/:dataset', RWIndexRouter.dataAccessNotSupported);
-router.post('/rest-datasets/resourcewatch', RWIndexRouter.registerDataset);
+router.post('/query/:dataset', HDXIndexRouter.dataAccessNotSupported);
+router.post('/download/:dataset', HDXIndexRouter.dataAccessNotSupported);
+router.post('/fields/:dataset', HDXIndexRouter.dataAccessNotSupported);
+router.post('/rest-datasets/hdx', HDXIndexRouter.registerDataset);
 
 module.exports = router;

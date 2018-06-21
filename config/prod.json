@@ -1,6 +1,6 @@
 {
     "logger": {
-        "name": "resource-watch-index-adapter",
+        "name": "hdx-index-adapter",
         "level": "warn",
         "toFile": false,
         "dirLogFile": null

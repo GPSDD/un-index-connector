@@ -1,7 +1,7 @@
-# Resource Watch Index Adapter
+# HDX Index Adapter
 
 
-This repository is the microservice that implements the Resource Watch Index Adapter
+This repository is the microservice that implements the HDX Index Adapter
 funcionality
 
 1. [Getting Started](#getting-started)
@@ -19,8 +19,8 @@ that you have [Docker Compose](https://docs.docker.com/compose/install/)
 installed on your machine.
 
 ```
-git clone https://github.com/Vizzuality/gfw-geostore-api.git
-cd resource-watch-index-adapter
+git clone https://github.com/GPSDD/hdx-index-adapter.git
+cd hdx-index-adapter
 ./adapter.sh develop
 ```text
 
@@ -37,18 +37,29 @@ It is necessary to define these environment variables:
 
 ## Field correspondence
 
+The field correspondence is based on the metadata object for a single package - I.E. [this link](https://data.humdata.org/api/3/action/package_show?id=141121-sierra-leone-health-facilities).
+In the HDX domain, a `package` entity may refer to multiple data files - identified as `resources`. 
+Given that this structure does not match directly to the API structure, we use the following logic to map the HDX domain structure to ours:
 
-| Field in SDG Metadata     | Field in RW Metadata  | Value         |
+1. Each HDX `package` tentatively corresponds to one API Highways dataset.
+2. Within each `package`, if there's one and only `resource` with `format` of type `JSON`, we use that `resource` on step 4. If not, we proceed to step 3.
+3. Within each `package`, if there's one and only `resource` with `format` of type `CSV`, we use that `resource` on step 4. If not, the `dataset` status is set to `failed` and no metadata is created.
+4. We combine the `package` data and the selected `resource` data to generate metadata as described in the spec table below. 
+
+| Field in SDG Metadata     | Field in HDX data     | Value         |
 |---------------------------|-----------------------|---------------|
 | userId                    |                       |               |
 | language                  |                       | 'en'          |
 | resource                  |                       |               |
-| name                      | name                  |               |
-| description               | description           |               |
-| sourceOrganization        |                       | 'Resource Watch' |
-| dataDownloadUrl           |                       | '' with :dataset-id = id of dataset |
-| dataSourceUrl             | source (prio1)        | (will depend on source app) (prio 2) |
-| dataSourceEndpoint        |                       | 'https://api.resourcewatch.org/v2/countries/all/indicators/:indicator?format=json&per_page=30000' with :indicator = id of indicator|
-| license                   | license               |               |
-| info                      | info                  |               |
+| name                      | `package.name`        |               |
+| description               | `package.resource.description`        | |
+| sourceOrganization        | `package.organization.name`           | |
+| dataDownloadUrl           | 'https://data.humdata.org' + `package.resource.hdx_rel_url` | |
+| dataSourceUrl             | 'https://data.humdata.org/dataset/' + `package.name`        | |
+| dataSourceEndpoint        | 'https://data.humdata.org' + `package.resource.hdx_rel_url` | |
+| license                   | Try to match the value of `package.license` to one of the [accepted licenses](https://data.world/license-help), fallback to 'Other'  | |
 | status                    |                       | 'published'   |
+
+
+As for importing `tag` data, the `package.tags.name` will be tentatively matched to the taxonomy entities already present in the graph database, and imported when they match.
+In parallel, the API's `legacy` taxonomy will be populated with the `package.organization.name` value. 

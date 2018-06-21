@@ -1,21 +1,21 @@
 {
      "logger": {
-        "name": "resource-watch-index-adapter-DEV",
+        "name": "hdx-index-adapter-DEV",
         "level": "debug",
         "toFile": false,
         "dirLogFile": null
     },
     "service": {
-        "id": "resource-watch-index-adapter_1.0.0",
-        "name": "RW Indexing Adapter",
-        "port": 3011
+        "id": "hdx-index-adapter_1.0.0",
+        "name": "HDX Indexing Adapter",
+        "port": 3012
     },
-    "resourcewatch": {
-        "metadata": "https://api.resourcewatch.org/v1/dataset/:dataset-id/metadata?format=json",
-        "dataset": "https://api.resourcewatch.org/v1/dataset/:dataset-id?format=json",
-        "graph": "https://api.resourcewatch.org/v1/dataset/:dataset-id/vocabulary/knowledge_graph",
-        "dataSourceUrl": "https://data.resourcewatch.org/indicator/dataset-id",
-        "dataSourceEndpoint": "https://api.resourcewatch.org/v1/download?sql=select%20*%20from%20:dataset-id"
+    "hdx": {
+        "metadata": "https://api.hdx.org/v1/dataset/:dataset-id/metadata?format=json",
+        "dataset": "https://api.hdx.org/v1/dataset/:dataset-id?format=json",
+        "graph": "https://api.hdx.org/v1/dataset/:dataset-id/vocabulary/knowledge_graph",
+        "dataSourceUrl": "https://data.hdx.org/indicator/dataset-id",
+        "dataSourceEndpoint": "https://api.hdx.org/v1/download?sql=select%20*%20from%20:dataset-id"
     },
     "cron": "00 * * * * *"
 }
