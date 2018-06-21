@@ -50,7 +50,7 @@ Given that this structure does not match directly to the API structure, we use t
 | userId                    |                       |               |
 | language                  |                       | 'en'          |
 | resource                  |                       |               |
-| name                      | `package.title`        |               |
+| name                      | `package.title`, or the name provided on the create request as fallback |               |
 | description               | `package.resource.description`        | |
 | sourceOrganization        | `package.organization.title`           | |
 | dataDownloadUrl           | 'https://data.humdata.org' + `package.resource.hdx_rel_url` | |

@@ -13,7 +13,7 @@ const dataset = {
     }
 };
 
-describe('E2E test', () => {
+describe('HDX query tests', () => {
     before(() => {
         nock.cleanAll();
     });

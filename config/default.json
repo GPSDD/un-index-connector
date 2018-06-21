@@ -11,11 +11,10 @@
         "port": 3012
     },
     "hdx": {
-        "metadata": "https://api.hdx.org/v1/dataset/:dataset-id/metadata?format=json",
-        "dataset": "https://api.hdx.org/v1/dataset/:dataset-id?format=json",
-        "graph": "https://api.hdx.org/v1/dataset/:dataset-id/vocabulary/knowledge_graph",
-        "dataSourceUrl": "https://data.hdx.org/indicator/dataset-id",
-        "dataSourceEndpoint": "https://api.hdx.org/v1/download?sql=select%20*%20from%20:dataset-id"
+        "package": "https://data.humdata.org/api/3/action/package_show?id=:package-id",
+        "graph": "https://api.hdx.org/v1/dataset/:package-id/vocabulary/knowledge_graph",
+        "dataSourceUrl": "https://data.humdata.org/dataset/:package-id",
+        "dataSourceEndpoint": "https://data.humdata.org:resouce-file-path"
     },
     "cron": "00 * * * * *"
 }

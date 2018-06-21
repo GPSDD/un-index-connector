@@ -49,95 +49,60 @@ class HDXIndexService {
     }
 
     static async register(dataset, userId, update = false) {
-        logger.debug(`Obtaining metadata of indicator ${dataset.tableName}`);
+        logger.debug(`Obtaining metadata of HFX package ${dataset.tableName}`);
 
-        logger.debug('Obtaining dataset info and metadata of dataset ', `${config.hdx.metadata}`.replace(':dataset-id', dataset.tableName));
-        let sourceOrganization;
+        logger.debug('Obtaining dataset info and metadata of HFX package ', `${config.hdx.package}`.replace(':package-id', dataset.tableName));
+        // let sourceOrganization;
+        let hdxPackage;
+
         try {
-            const rwDatasetResponse = await requestPromise({
+            const hdxPackageResponse = await requestPromise({
                 method: 'GET',
-                url: `${config.hdx.dataset}`.replace(':dataset-id', dataset.tableName),
+                url: `${config.hdx.package}`.replace(':package-id', dataset.tableName),
                 json: true
             });
-            logger.debug('HDX dataset response', rwDatasetResponse);
+            logger.debug('HDX package response', hdxPackageResponse);
 
-            let rwDataset;
-            if (rwDatasetResponse && rwDatasetResponse.data && rwDatasetResponse.data.attributes) {
-                rwDataset = rwDatasetResponse.data.attributes;
+            if (hdxPackageResponse && hdxPackageResponse.result && hdxPackageResponse.result.resources) {
+                hdxPackage = hdxPackageResponse.result;
+            } else {
+                throw new Error(`Incomplete or invalid data loaded from HDX API: ${dataset.tableName}`);
             }
 
-            const rwMetadataResponse = await requestPromise({
-                method: 'GET',
-                url: `${config.hdx.metadata}`.replace(':dataset-id', dataset.tableName),
-                json: true
-            });
-            logger.debug('HDX metadata response', rwMetadataResponse);
-
-            if (!rwMetadataResponse || !rwMetadataResponse.data || rwMetadataResponse.data.length === 0) {
-                throw new Error('Dataset metadata response format not valid');
+            if (hdxPackage.resources.length === 0) {
+                throw new Error(`No resource data associated with this HDX package was found: ${dataset.tableName}`);
             }
 
-            let rwMetadataList = rwMetadataResponse.data;
+            let hdxResource;
+            const jsonResources = hdxPackage.resources.filter(elem => elem.format.toUpperCase() === 'JSON');
 
-            if (dataset.sourceLanguage) {
-                rwMetadataList = rwMetadataList.filter(elem => elem.attributes.language === dataset.sourceLanguage);
+            if (jsonResources.length === 1) {
+                hdxResource = jsonResources[0];
+            } else {
+                const csvResources = hdxPackageResponse.result.resources.filter(elem => elem.format.toUpperCase() === 'CSV');
+                if (csvResources.length === 1) {
+                    hdxResource = csvResources[0];
+                }
             }
 
-            if (dataset.sourceApplication) {
-                rwMetadataList = rwMetadataList.filter(elem => elem.attributes.application.includes(dataset.sourceApplication));
+            if (!hdxResource) {
+                throw new Error(`No single JSON or CSV resource found for HDX package ${dataset.tableName}`);
             }
 
-            if (rwMetadataList.length === 0) {
-                throw new Error('Dataset metadata response format not valid');
-            }
-
-            const rwMetadata = rwMetadataList[0].attributes;
-
-            const dataDownloadURL = config.hdx.dataSourceEndpoint.replace(':dataset-id', rwMetadata.dataset);
-            let datasetPage = dataDownloadURL;
-
-            switch (rwMetadata.application) {
-
-                case 'prep':
-                    sourceOrganization = 'PREP- Partnership for Resilience & Preparedness';
-                    if (rwDataset) {
-                        datasetPage = `https://www.prepdata.org/dataset/${rwDataset.slug}`;
-                    }
-                    break;
-                case 'gfw':
-                    sourceOrganization = 'Global Forest Watch';
-                    break;
-                case 'gfw-climate':
-                    sourceOrganization = 'Global Forest Watch - Climate';
-                    break;
-                case 'aqueduct':
-                    sourceOrganization = 'Aqueduct';
-                    break;
-                case 'forest-atlas':
-                case 'hdx':
-                    sourceOrganization = 'HDX';
-                    if (rwDataset) {
-                        datasetPage = `https://hdx.org/data/explore/${rwDataset.slug}`;
-                    }
-                    break;
-                default:
-                    sourceOrganization = 'HDX API';
-                    break;
-
-            }
+            const dataDownloadURL = config.hdx.dataSourceEndpoint.replace(':resouce-file-path', hdxResource.hdx_rel_url);
+            const dataSourceUrl = config.hdx.dataSourceUrl.replace(':package-id', dataset.tableName);
 
             const metadata = {
-                language: rwMetadata.language,
-                name: rwMetadata.name || dataset.name,
-                description: rwMetadata.description,
-                sourceOrganization,
-                dataSourceUrl: datasetPage,
+                language: 'en',
+                name: hdxPackage.title || dataset.name,
+                description: hdxResource.description,
+                sourceOrganization: hdxPackage.organization.title,
+                dataSourceUrl,
                 dataSourceEndpoint: dataDownloadURL,
                 dataDownloadUrl: dataDownloadURL,
                 status: 'published',
-                license: ACCEPTED_LICENSE_STRINGS.includes(rwMetadata.license) ? rwMetadata.license : 'Other',
-                userId,
-                info: rwMetadata.info
+                license: ACCEPTED_LICENSE_STRINGS.includes(hdxPackage.license) ? hdxPackage.license : 'Other',
+                userId
             };
             logger.debug('Saving metadata', metadata);
             if (!update) {
@@ -161,47 +126,37 @@ class HDXIndexService {
             throw new Error(`Error obtaining metadata: ${err}`);
         }
 
-        if (!update) {
-            try {
-                const rwVocabularyResponse = await requestPromise({
-                    method: 'GET',
-                    url: `${config.hdx.graph}`.replace(':dataset-id', dataset.tableName),
-                    json: true
-                });
-                logger.debug('HDX graph vocabulary response', rwVocabularyResponse);
-
-                let rwVocabulary;
-                if (rwVocabularyResponse && rwVocabularyResponse.data && rwVocabularyResponse.data.length > 0) {
-                    rwVocabulary = rwVocabularyResponse.data[0].attributes.tags;
-                }
-
-                const body = {
-                    legacy: {
-                        tags: ['HDX API']
-                    }
-                };
-                if (rwVocabulary && rwVocabulary.length > 0) {
-                    body.knowledge_graph = {
-                        tags: rwVocabulary
-                    };
-                }
-
-                if (sourceOrganization && sourceOrganization !== 'HDX API') {
-                    body.legacy.tags.push(sourceOrganization);
-                }
-
-                logger.debug('Tagging dataset for HDX dataset', dataset.tableName);
-                await ctRegisterMicroservice.requestToMicroservice({
-                    method: 'POST',
-                    uri: `/dataset/${dataset.id}/vocabulary`,
-                    body,
-                    json: true
-                });
-            } catch (err) {
-                logger.error('Error tagging dataset', err);
-                throw new Error(`Error tagging dataset: ${err}`);
-            }
-        }
+        // if (!update && hdxPackage) {
+        //     try {
+        //         let hdxTags = hdxPackage.tags.map(elem => elem.name);
+        //
+        //         const body = {
+        //             legacy: {
+        //                 tags: ['HDX API', hdxPackage.organization.title]
+        //             }
+        //         };
+        //         if (hdxTags && hdxTags.length > 0) {
+        //             body.knowledge_graph = {
+        //                 tags: hdxTags
+        //             };
+        //         }
+        //
+        //         if (sourceOrganization && sourceOrganization !== 'HDX API') {
+        //             body.legacy.tags.push(sourceOrganization);
+        //         }
+        //
+        //         logger.debug('Tagging dataset for HDX dataset', dataset.tableName);
+        //         await ctRegisterMicroservice.requestToMicroservice({
+        //             method: 'POST',
+        //             uri: `/dataset/${dataset.id}/vocabulary`,
+        //             body,
+        //             json: true
+        //         });
+        //     } catch (err) {
+        //         logger.error('Error tagging dataset', err);
+        //         throw new Error(`Error tagging dataset: ${err}`);
+        //     }
+        // }
     }
 
 }
