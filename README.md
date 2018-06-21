@@ -50,9 +50,9 @@ Given that this structure does not match directly to the API structure, we use t
 | userId                    |                       |               |
 | language                  |                       | 'en'          |
 | resource                  |                       |               |
-| name                      | `package.name`        |               |
+| name                      | `package.title`        |               |
 | description               | `package.resource.description`        | |
-| sourceOrganization        | `package.organization.name`           | |
+| sourceOrganization        | `package.organization.title`           | |
 | dataDownloadUrl           | 'https://data.humdata.org' + `package.resource.hdx_rel_url` | |
 | dataSourceUrl             | 'https://data.humdata.org/dataset/' + `package.name`        | |
 | dataSourceEndpoint        | 'https://data.humdata.org' + `package.resource.hdx_rel_url` | |
@@ -61,4 +61,4 @@ Given that this structure does not match directly to the API structure, we use t
 
 
 As for importing `tag` data, the `package.tags.name` will be tentatively matched to the taxonomy entities already present in the graph database, and imported when they match.
-In parallel, the API's `legacy` taxonomy will be populated with the `package.organization.name` value. 
+In parallel, the API's `legacy` taxonomy will be populated with the `package.organization.title` value. 
