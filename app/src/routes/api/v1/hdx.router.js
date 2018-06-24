@@ -44,6 +44,11 @@ class HDXIndexRouter {
         } catch (e) {
             logger.error(e);
             try {
+                // await ctRegisterMicroservice.requestToMicroservice({
+                //     method: 'DELETE',
+                //     uri: `/dataset/${ctx.request.body.connector.id}`,
+                //     json: true
+                // });
                 await ctRegisterMicroservice.requestToMicroservice({
                     method: 'PATCH',
                     uri: `/dataset/${ctx.request.body.connector.id}`,

@@ -28,7 +28,7 @@ class HDXIndexService {
             logger.debug('Obtaining datasets');
             const datasets = await ctRegisterMicroservice.requestToMicroservice({
                 method: 'GET',
-                uri: `/dataset?provider=hdx&page[size]=99999&status=saved`,
+                uri: `/dataset?provider=hdx&page[size]=99999`,
                 json: true
             });
             if (datasets && datasets.data) {
