@@ -1,15 +1,15 @@
 {
-	"name": "HDX Index Adapter",
-	"cache": ["index-hdx"],
-	"uncache": ["index-hdx"],
-	"tags": ["hdx"],
+	"name": "UN Index Adapter",
+	"cache": ["index-un"],
+	"uncache": ["index-un"],
+	"tags": ["un"],
 	"endpoints": [{
 		"path": "/v1/query/:dataset",
 		"method": "GET",
 		"binary": true,
 		"redirect": {
 			"method": "POST",
-			"path": "/api/v1/hdx/query/:dataset"
+			"path": "/api/v1/un/query/:dataset"
 		},
 		"filters": [{
 			"name": "dataset",
@@ -21,7 +21,7 @@
 			"compare": {
 				"data": {
 					"attributes": {
-						"provider": "hdx"
+						"provider": "un"
 					}
 				}
 			}
@@ -32,7 +32,7 @@
 		"binary": true,
 		"redirect": {
 			"method": "POST",
-			"path": "/api/v1/hdx/query/:dataset"
+			"path": "/api/v1/un/query/:dataset"
 		},
 		"filters": [{
 			"name": "dataset",
@@ -44,7 +44,7 @@
 			"compare": {
 				"data": {
 					"attributes": {
-						"provider": "hdx"
+						"provider": "un"
 					}
 				}
 			}
@@ -55,7 +55,7 @@
 		"binary": true,
 		"redirect": {
 			"method": "POST",
-			"path": "/api/v1/hdx/download/:dataset"
+			"path": "/api/v1/un/download/:dataset"
 		},
 		"filters": [{
 			"name": "dataset",
@@ -67,7 +67,7 @@
 			"compare": {
 				"data": {
 					"attributes": {
-						"provider": "hdx"
+						"provider": "un"
 					}
 				}
 			}
@@ -78,7 +78,7 @@
 		"binary": true,
 		"redirect": {
 			"method": "POST",
-			"path": "/api/v1/hdx/download/:dataset"
+			"path": "/api/v1/un/download/:dataset"
 		},
 		"filters": [{
 			"name": "dataset",
@@ -90,7 +90,7 @@
 			"compare": {
 				"data": {
 					"attributes": {
-						"provider": "hdx"
+						"provider": "un"
 					}
 				}
 			}
@@ -100,7 +100,7 @@
 		"method": "GET",
 		"redirect": {
 			"method": "POST",
-			"path": "/api/v1/hdx/fields/:dataset"
+			"path": "/api/v1/un/fields/:dataset"
 		},
 		"filters": [{
 			"name": "dataset",
@@ -112,17 +112,17 @@
 			"compare": {
 				"data": {
 					"attributes": {
-						"provider": "hdx"
+						"provider": "un"
 					}
 				}
 			}
 		}]
 	}, {
-		"path": "/v1/rest-datasets/hdx",
+		"path": "/v1/rest-datasets/un",
 		"method": "POST",
 		"redirect": {
 			"method": "POST",
-			"path": "/api/v1/hdx/rest-datasets/hdx"
+			"path": "/api/v1/un/rest-datasets/un"
 		}
 	}]
 }

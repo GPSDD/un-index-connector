@@ -12,12 +12,12 @@ const { getTestServer } = require('./test-server');
 
 const requester = getTestServer();
 
-describe('HDX Dataset creation tests', () => {
+describe('UN Dataset creation tests', () => {
     before(() => {
 
         nock.cleanAll();
 
-        // HDX responses for info and metadata on real dataset
+        // UN responses for info and metadata on real dataset
         // nock('https://data.humdata.org')
         //     .get(`/api/3/action/package_show?id=${HDX_DATASET_CREATE_REQUEST.connector.tableName}`)
         //     .times(6)
@@ -34,8 +34,8 @@ describe('HDX Dataset creation tests', () => {
         //     .reply(200);
     });
 
-    it('Create dataset for HDX package with no resource should fail', async () => {
-        // HDX responses for info on package and resources
+    it('Create dataset for UN package with no resource should fail', async () => {
+        // UN responses for info on package and resources
         const singleJsonResourceRequest = Object.assign({}, HDX_API_DATASET_RESPONSE_NO_RESOURCE);
 
         nock('https://data.humdata.org')
@@ -48,7 +48,7 @@ describe('HDX Dataset creation tests', () => {
                 const expectedRequestContent = {
                     dataset: {
                         status: 2,
-                        errorMessage: `Error - Error obtaining metadata: Error: No resource data associated with this HDX package was found: ${HDX_DATASET_CREATE_REQUEST.connector.tableName}`
+                        errorMessage: `Error - Error obtaining metadata: Error: No resource data associated with this UN package was found: ${HDX_DATASET_CREATE_REQUEST.connector.tableName}`
                     }
                 };
 
@@ -59,14 +59,14 @@ describe('HDX Dataset creation tests', () => {
             .reply(200);
 
         const response = await requester
-            .post(`/api/v1/hdx/rest-datasets/hdx`)
+            .post(`/api/v1/un/rest-datasets/un`)
             .send(HDX_DATASET_CREATE_REQUEST);
 
         response.status.should.equal(200);
     });
 
-    it('Create dataset for HDX package with a XLSX resource should fail', async () => {
-        // HDX responses for info on package and resources
+    it('Create dataset for UN package with a XLSX resource should fail', async () => {
+        // UN responses for info on package and resources
         const singleJsonResourceRequest = Object.assign({}, HDX_API_DATASET_RESPONSE_NO_RESOURCE);
         singleJsonResourceRequest.result.resources = [HDX_API_DATASET_RESOURCE_XLSX];
 
@@ -80,7 +80,7 @@ describe('HDX Dataset creation tests', () => {
                 const expectedRequestContent = {
                     dataset: {
                         status: 2,
-                        errorMessage: `Error - Error obtaining metadata: Error: No single JSON or CSV resource found for HDX package ${HDX_DATASET_CREATE_REQUEST.connector.tableName}`
+                        errorMessage: `Error - Error obtaining metadata: Error: No single JSON or CSV resource found for UN package ${HDX_DATASET_CREATE_REQUEST.connector.tableName}`
                     }
                 };
 
@@ -91,14 +91,14 @@ describe('HDX Dataset creation tests', () => {
             .reply(200);
 
         const response = await requester
-            .post(`/api/v1/hdx/rest-datasets/hdx`)
+            .post(`/api/v1/un/rest-datasets/un`)
             .send(HDX_DATASET_CREATE_REQUEST);
 
         response.status.should.equal(200);
     });
 
-    it('Create dataset for HDX package with single JSON resource should be successful (happy case)', async () => {
-        // HDX responses for info on package and resources
+    it('Create dataset for UN package with single JSON resource should be successful (happy case)', async () => {
+        // UN responses for info on package and resources
         const singleJsonResourceRequest = Object.assign({}, HDX_API_DATASET_RESPONSE_NO_RESOURCE);
         singleJsonResourceRequest.result.resources = [HDX_API_DATASET_RESOURCE_JSON];
 
@@ -111,10 +111,10 @@ describe('HDX Dataset creation tests', () => {
             .post(`/v1/dataset/${HDX_DATASET_CREATE_REQUEST.connector.id}/metadata`, (body) => {
                 const expectedRequestBody = {
                     language: 'en',
-                    name: 'Fake HDX package title',
+                    name: 'Fake UN package title',
                     description: 'Json resource dataset description',
                     sourceOrganization: 'Redhum Ecuador',
-                    dataSourceUrl: 'https://data.humdata.org/dataset/fake-hdx-dataset-name',
+                    dataSourceUrl: 'https://data.humdata.org/dataset/fake-un-dataset-name',
                     dataSourceEndpoint: 'https://data.humdata.org/dataset/bdc7d663-7332-4d2d-a5ca-6fc52cae882e/resource/75376c95-ac07-4b08-a551-dd16c70c9f98/download/ecuador_admin_3light.json',
                     dataDownloadUrl: 'https://data.humdata.org/dataset/bdc7d663-7332-4d2d-a5ca-6fc52cae882e/resource/75376c95-ac07-4b08-a551-dd16c70c9f98/download/ecuador_admin_3light.json',
                     status: 'published',
@@ -144,7 +144,7 @@ describe('HDX Dataset creation tests', () => {
         //                 ]
         //             },
         //             legacy: {
-        //                 tags: ['HDX API']
+        //                 tags: ['UN API']
         //             }
         //         };
         //
@@ -165,14 +165,14 @@ describe('HDX Dataset creation tests', () => {
 
 
         const response = await requester
-            .post(`/api/v1/hdx/rest-datasets/hdx`)
+            .post(`/api/v1/un/rest-datasets/un`)
             .send(HDX_DATASET_CREATE_REQUEST);
 
         response.status.should.equal(200);
     });
 
-    it('Create dataset for HDX package with single CSV and a single JSON resource should be successful and use the JSON data', async () => {
-        // HDX responses for info on package and resources
+    it('Create dataset for UN package with single CSV and a single JSON resource should be successful and use the JSON data', async () => {
+        // UN responses for info on package and resources
         const singleJsonResourceRequest = Object.assign({}, HDX_API_DATASET_RESPONSE_NO_RESOURCE);
         singleJsonResourceRequest.result.resources = [HDX_API_DATASET_RESOURCE_JSON, HDX_API_DATASET_RESOURCE_CSV];
 
@@ -185,10 +185,10 @@ describe('HDX Dataset creation tests', () => {
             .post(`/v1/dataset/${HDX_DATASET_CREATE_REQUEST.connector.id}/metadata`, (body) => {
                 const expectedRequestBody = {
                     language: 'en',
-                    name: 'Fake HDX package title',
+                    name: 'Fake UN package title',
                     description: 'Json resource dataset description',
                     sourceOrganization: 'Redhum Ecuador',
-                    dataSourceUrl: 'https://data.humdata.org/dataset/fake-hdx-dataset-name',
+                    dataSourceUrl: 'https://data.humdata.org/dataset/fake-un-dataset-name',
                     dataSourceEndpoint: 'https://data.humdata.org/dataset/bdc7d663-7332-4d2d-a5ca-6fc52cae882e/resource/75376c95-ac07-4b08-a551-dd16c70c9f98/download/ecuador_admin_3light.json',
                     dataDownloadUrl: 'https://data.humdata.org/dataset/bdc7d663-7332-4d2d-a5ca-6fc52cae882e/resource/75376c95-ac07-4b08-a551-dd16c70c9f98/download/ecuador_admin_3light.json',
                     status: 'published',
@@ -218,7 +218,7 @@ describe('HDX Dataset creation tests', () => {
         //                 ]
         //             },
         //             legacy: {
-        //                 tags: ['HDX API']
+        //                 tags: ['UN API']
         //             }
         //         };
         //
@@ -239,14 +239,14 @@ describe('HDX Dataset creation tests', () => {
 
 
         const response = await requester
-            .post(`/api/v1/hdx/rest-datasets/hdx`)
+            .post(`/api/v1/un/rest-datasets/un`)
             .send(HDX_DATASET_CREATE_REQUEST);
 
         response.status.should.equal(200);
     });
 
-    it('Create dataset for HDX package with single CSV and no JSON resource should be successful and use the CSV data', async () => {
-        // HDX responses for info on package and resources
+    it('Create dataset for UN package with single CSV and no JSON resource should be successful and use the CSV data', async () => {
+        // UN responses for info on package and resources
         const singleJsonResourceRequest = Object.assign({}, HDX_API_DATASET_RESPONSE_NO_RESOURCE);
         singleJsonResourceRequest.result.resources = [HDX_API_DATASET_RESOURCE_CSV];
 
@@ -259,10 +259,10 @@ describe('HDX Dataset creation tests', () => {
             .post(`/v1/dataset/${HDX_DATASET_CREATE_REQUEST.connector.id}/metadata`, (body) => {
                 const expectedRequestBody = {
                     language: 'en',
-                    name: 'Fake HDX package title',
+                    name: 'Fake UN package title',
                     description: 'Csv resource dataset description',
                     sourceOrganization: 'Redhum Ecuador',
-                    dataSourceUrl: 'https://data.humdata.org/dataset/fake-hdx-dataset-name',
+                    dataSourceUrl: 'https://data.humdata.org/dataset/fake-un-dataset-name',
                     dataSourceEndpoint: 'https://data.humdata.org/dataset/614a370e-a34b-42a7-81e7-b08e1d70e4e1/resource/00123612-8469-4da3-aeaf-0f42315545b2/download/160516_5w_forhdx.csv',
                     dataDownloadUrl: 'https://data.humdata.org/dataset/614a370e-a34b-42a7-81e7-b08e1d70e4e1/resource/00123612-8469-4da3-aeaf-0f42315545b2/download/160516_5w_forhdx.csv',
                     status: 'published',
@@ -292,7 +292,7 @@ describe('HDX Dataset creation tests', () => {
         //                 ]
         //             },
         //             legacy: {
-        //                 tags: ['HDX API']
+        //                 tags: ['UN API']
         //             }
         //         };
         //
@@ -313,15 +313,15 @@ describe('HDX Dataset creation tests', () => {
 
 
         const response = await requester
-            .post(`/api/v1/hdx/rest-datasets/hdx`)
+            .post(`/api/v1/un/rest-datasets/un`)
             .send(HDX_DATASET_CREATE_REQUEST);
 
         response.status.should.equal(200);
     });
 
 
-    it('Create dataset for HDX package with single CSV and multiple JSON resource should be successful and use the CSV data', async () => {
-        // HDX responses for info on package and resources
+    it('Create dataset for UN package with single CSV and multiple JSON resource should be successful and use the CSV data', async () => {
+        // UN responses for info on package and resources
         const singleJsonResourceRequest = Object.assign({}, HDX_API_DATASET_RESPONSE_NO_RESOURCE);
         singleJsonResourceRequest.result.resources = [HDX_API_DATASET_RESOURCE_CSV, HDX_API_DATASET_RESOURCE_JSON, HDX_API_DATASET_RESOURCE_JSON];
 
@@ -334,10 +334,10 @@ describe('HDX Dataset creation tests', () => {
             .post(`/v1/dataset/${HDX_DATASET_CREATE_REQUEST.connector.id}/metadata`, (body) => {
                 const expectedRequestBody = {
                     language: 'en',
-                    name: 'Fake HDX package title',
+                    name: 'Fake UN package title',
                     description: 'Csv resource dataset description',
                     sourceOrganization: 'Redhum Ecuador',
-                    dataSourceUrl: 'https://data.humdata.org/dataset/fake-hdx-dataset-name',
+                    dataSourceUrl: 'https://data.humdata.org/dataset/fake-un-dataset-name',
                     dataSourceEndpoint: 'https://data.humdata.org/dataset/614a370e-a34b-42a7-81e7-b08e1d70e4e1/resource/00123612-8469-4da3-aeaf-0f42315545b2/download/160516_5w_forhdx.csv',
                     dataDownloadUrl: 'https://data.humdata.org/dataset/614a370e-a34b-42a7-81e7-b08e1d70e4e1/resource/00123612-8469-4da3-aeaf-0f42315545b2/download/160516_5w_forhdx.csv',
                     status: 'published',
@@ -367,7 +367,7 @@ describe('HDX Dataset creation tests', () => {
         //                 ]
         //             },
         //             legacy: {
-        //                 tags: ['HDX API']
+        //                 tags: ['UN API']
         //             }
         //         };
         //
@@ -388,14 +388,14 @@ describe('HDX Dataset creation tests', () => {
 
 
         const response = await requester
-            .post(`/api/v1/hdx/rest-datasets/hdx`)
+            .post(`/api/v1/un/rest-datasets/un`)
             .send(HDX_DATASET_CREATE_REQUEST);
 
         response.status.should.equal(200);
     });
 
-    it('Create dataset for HDX package with multiple CSV and JSON resources should fail', async () => {
-        // HDX responses for info on package and resources
+    it('Create dataset for UN package with multiple CSV and JSON resources should fail', async () => {
+        // UN responses for info on package and resources
         const singleJsonResourceRequest = Object.assign({}, HDX_API_DATASET_RESPONSE_NO_RESOURCE);
         singleJsonResourceRequest.result.resources = [
             HDX_API_DATASET_RESOURCE_JSON,
@@ -414,7 +414,7 @@ describe('HDX Dataset creation tests', () => {
                 const expectedRequestContent = {
                     dataset: {
                         status: 2,
-                        errorMessage: `Error - Error obtaining metadata: Error: No single JSON or CSV resource found for HDX package ${HDX_DATASET_CREATE_REQUEST.connector.tableName}`
+                        errorMessage: `Error - Error obtaining metadata: Error: No single JSON or CSV resource found for UN package ${HDX_DATASET_CREATE_REQUEST.connector.tableName}`
                     }
                 };
 
@@ -425,7 +425,7 @@ describe('HDX Dataset creation tests', () => {
             .reply(200);
 
         const response = await requester
-            .post(`/api/v1/hdx/rest-datasets/hdx`)
+            .post(`/api/v1/un/rest-datasets/un`)
             .send(HDX_DATASET_CREATE_REQUEST);
 
         response.status.should.equal(200);

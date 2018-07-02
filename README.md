@@ -1,7 +1,7 @@
-# HDX Index Adapter
+# UN Index Adapter
 
 
-This repository is the microservice that implements the HDX Index Adapter functionality.
+This repository is the microservice that implements the UN Index Adapter functionality.
 
 1. [Getting Started](#getting-started)
 
@@ -18,8 +18,8 @@ that you have [Docker Compose](https://docs.docker.com/compose/install/)
 installed on your machine.
 
 ```
-git clone https://github.com/GPSDD/hdx-index-adapter.git
-cd hdx-index-adapter
+git clone https://github.com/GPSDD/un-index-adapter.git
+cd un-index-adapter
 ./adapter.sh develop
 ```text
 
@@ -37,20 +37,20 @@ It is necessary to define these environment variables:
 ## Field correspondence
 
 The field correspondence is based on the metadata object for a single package - I.E. [this link](https://data.humdata.org/api/3/action/package_show?id=141121-sierra-leone-health-facilities).
-In the HDX domain, a `package` entity may refer to multiple data files - identified as `resources`. 
-Given that this structure does not match directly to the API structure, we use the following logic to map the HDX domain structure to ours:
+In the UN domain, a `package` entity may refer to multiple data files - identified as `resources`. 
+Given that this structure does not match directly to the API structure, we use the following logic to map the UN domain structure to ours:
 
-1. Each HDX `package` tentatively corresponds to one API Highways dataset.
+1. Each UN `package` tentatively corresponds to one API Highways dataset.
 2. Within each `package`, if there's one and only `resource` with `format` of type `JSON`, we use that `resource` on step 4. If not, we proceed to step 3.
 3. Within each `package`, if there's one and only `resource` with `format` of type `CSV`, we use that `resource` on step 4. If not, the `dataset` status is set to `failed` and no metadata is created.
 4. We combine the `package` data and the selected `resource` data to generate metadata as described in the spec table below. 
 
-| Field in SDG Metadata     | Field in HDX data     | Value         |
+| Field in SDG Metadata     | Field in UN data     | Value         |
 |---------------------------|-----------------------|---------------|
 | userId                    |                       |               |
 | language                  |                       | 'en'          |
 | resource                  |                       |               |
-| name                      | `package.title`, or the name provided on the create request as fallback |               |
+| name                      | ? |               |
 | description               | `package.resource.description`        | |
 | sourceOrganization        | `package.organization.title`           | |
 | dataDownloadUrl           | 'https://data.humdata.org' + `package.resource.hdx_rel_url` | |

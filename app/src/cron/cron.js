@@ -1,6 +1,6 @@
 const CronJob = require('cron').CronJob;
 const logger = require('logger');
-const hdxService = require('services/hdx.service');
+const hdxService = require('services/un.service');
 const config = require('config');
 
 logger.info('Initializing cron');

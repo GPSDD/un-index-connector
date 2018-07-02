@@ -1,9 +1,9 @@
 base:
   build: .
   ports:
-    - "3012:3012"
-  container_name: hdx-index-adapter
+    - "3013:3013"
+  container_name: un-index-adapter
   environment:
-    PORT: 3012
+    PORT: 3013
     NODE_PATH: app/src
 

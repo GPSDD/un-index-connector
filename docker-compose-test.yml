@@ -3,8 +3,8 @@ test:
     file: base.yml
     service: base
   ports:
-    - "3012"
-  container_name: hdx-index-adapter-test
+    - "3013"
+  container_name: un-index-adapter-test
   environment:
     NODE_ENV: test
     CT_URL: http://mymachine:9000

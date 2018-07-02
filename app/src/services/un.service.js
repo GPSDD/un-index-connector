@@ -20,7 +20,7 @@ const ACCEPTED_LICENSE_STRINGS = [
     'Other'
 ];
 
-class HDXIndexService {
+class UNIndexService {
 
     static async cronUpdate() {
         try {
@@ -28,7 +28,7 @@ class HDXIndexService {
             logger.debug('Obtaining datasets');
             const datasets = await ctRegisterMicroservice.requestToMicroservice({
                 method: 'GET',
-                uri: `/dataset?provider=hdx&page[size]=99999`,
+                uri: `/dataset?provider=un&page[size]=99999`,
                 json: true
             });
             if (datasets && datasets.data) {
@@ -36,7 +36,7 @@ class HDXIndexService {
                     try {
                         const dataset = datasets.data[i].attributes;
                         dataset.id = datasets.data[i].id;
-                        await HDXIndexService.register(dataset, dataset.userId, true);
+                        await UNIndexService.register(dataset, dataset.userId, true);
                     } catch (err) {
                         logger.error('Error updating dataset', err);
                     }
@@ -51,26 +51,26 @@ class HDXIndexService {
     static async register(dataset, userId, update = false) {
         logger.debug(`Obtaining metadata of HFX package ${dataset.tableName}`);
 
-        logger.debug('Obtaining dataset info and metadata of HFX package ', `${config.hdx.package}`.replace(':package-id', dataset.tableName));
+        logger.debug('Obtaining dataset info and metadata of HFX package ', `${config.un.package}`.replace(':package-id', dataset.tableName));
         // let sourceOrganization;
         let hdxPackage;
 
         try {
             const hdxPackageResponse = await requestPromise({
                 method: 'GET',
-                url: `${config.hdx.package}`.replace(':package-id', dataset.tableName),
+                url: `${config.un.package}`.replace(':package-id', dataset.tableName),
                 json: true
             });
-            logger.debug('HDX package response', hdxPackageResponse);
+            logger.debug('UN package response', hdxPackageResponse);
 
             if (hdxPackageResponse && hdxPackageResponse.result && hdxPackageResponse.result.resources) {
                 hdxPackage = hdxPackageResponse.result;
             } else {
-                throw new Error(`Incomplete or invalid data loaded from HDX API: ${dataset.tableName}`);
+                throw new Error(`Incomplete or invalid data loaded from UN API: ${dataset.tableName}`);
             }
 
             if (hdxPackage.resources.length === 0) {
-                throw new Error(`No resource data associated with this HDX package was found: ${dataset.tableName}`);
+                throw new Error(`No resource data associated with this UN package was found: ${dataset.tableName}`);
             }
 
             let hdxResource;
@@ -86,11 +86,11 @@ class HDXIndexService {
             }
 
             if (!hdxResource) {
-                throw new Error(`No single JSON or CSV resource found for HDX package ${dataset.tableName}`);
+                throw new Error(`No single JSON or CSV resource found for UN package ${dataset.tableName}`);
             }
 
-            const dataDownloadURL = config.hdx.dataSourceEndpoint.replace(':resouce-file-path', hdxResource.hdx_rel_url);
-            const dataSourceUrl = config.hdx.dataSourceUrl.replace(':package-id', dataset.tableName);
+            const dataDownloadURL = config.un.dataSourceEndpoint.replace(':resouce-file-path', hdxResource.hdx_rel_url);
+            const dataSourceUrl = config.un.dataSourceUrl.replace(':package-id', dataset.tableName);
 
             const metadata = {
                 language: 'en',
@@ -132,7 +132,7 @@ class HDXIndexService {
         //
         //         const body = {
         //             legacy: {
-        //                 tags: ['HDX API', hdxPackage.organization.title]
+        //                 tags: ['UN API', hdxPackage.organization.title]
         //             }
         //         };
         //         if (hdxTags && hdxTags.length > 0) {
@@ -141,11 +141,11 @@ class HDXIndexService {
         //             };
         //         }
         //
-        //         if (sourceOrganization && sourceOrganization !== 'HDX API') {
+        //         if (sourceOrganization && sourceOrganization !== 'UN API') {
         //             body.legacy.tags.push(sourceOrganization);
         //         }
         //
-        //         logger.debug('Tagging dataset for HDX dataset', dataset.tableName);
+        //         logger.debug('Tagging dataset for UN dataset', dataset.tableName);
         //         await ctRegisterMicroservice.requestToMicroservice({
         //             method: 'POST',
         //             uri: `/dataset/${dataset.id}/vocabulary`,
@@ -161,4 +161,4 @@ class HDXIndexService {
 
 }
 
-module.exports = HDXIndexService;
+module.exports = UNIndexService;

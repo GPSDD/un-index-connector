@@ -1,18 +1,18 @@
 {
      "logger": {
-        "name": "hdx-index-adapter-DEV",
+        "name": "un-index-adapter-DEV",
         "level": "debug",
         "toFile": false,
         "dirLogFile": null
     },
     "service": {
-        "id": "hdx-index-adapter_1.0.0",
-        "name": "HDX Indexing Adapter",
-        "port": 3012
+        "id": "un-index-adapter_1.0.0",
+        "name": "UN Indexing Adapter",
+        "port": 3013
     },
-    "hdx": {
+    "un": {
         "package": "https://data.humdata.org/api/3/action/package_show?id=:package-id",
-        "graph": "https://api.hdx.org/v1/dataset/:package-id/vocabulary/knowledge_graph",
+        "graph": "https://api.un.org/v1/dataset/:package-id/vocabulary/knowledge_graph",
         "dataSourceUrl": "https://data.humdata.org/dataset/:package-id",
         "dataSourceEndpoint": "https://data.humdata.org:resouce-file-path"
     },

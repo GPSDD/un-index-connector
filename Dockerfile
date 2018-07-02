@@ -1,8 +1,8 @@
 FROM mhart/alpine-node:7.6
 MAINTAINER raul.requero@vizzuality.com
 
-ENV NAME hdx-index-adapter
-ENV USER hdx-index-adapter
+ENV NAME un-index-adapter
+ENV USER un-index-adapter
 
 RUN apk update && apk upgrade && \
     apk add --no-cache --update bash git openssh python alpine-sdk
@@ -24,7 +24,7 @@ COPY ./app /opt/$NAME/app
 RUN chown $USER:$USER /opt/$NAME
 
 # Tell Docker we are going to use this ports
-EXPOSE 3012
+EXPOSE 3013
 USER $USER
 
 ENTRYPOINT ["./entrypoint.sh"]

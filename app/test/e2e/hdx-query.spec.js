@@ -13,14 +13,14 @@ const dataset = {
     }
 };
 
-describe('HDX query tests', () => {
+describe('UN query tests', () => {
     before(() => {
         nock.cleanAll();
     });
 
     it('Load fields should return invalid request', async () => {
         const response = await requester
-            .post(`/api/v1/hdx/fields/${dataset.data.id}`)
+            .post(`/api/v1/un/fields/${dataset.data.id}`)
             .send({
                 dataset,
                 loggedUser: null
@@ -33,7 +33,7 @@ describe('HDX query tests', () => {
 
     it('Do query should return invalid request', async () => {
         const response = await requester
-            .post(`/api/v1/hdx/query/${dataset.data.id}?sql=`)
+            .post(`/api/v1/un/query/${dataset.data.id}?sql=`)
             .send({
                 dataset,
                 loggedUser: null

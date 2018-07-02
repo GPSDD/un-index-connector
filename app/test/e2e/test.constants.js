@@ -6,7 +6,7 @@ const ROLES = {
         email: 'user@control-tower.org',
         extraUserData: {
             apps: [
-                'hdx',
+                'un',
                 'gfw',
                 'gfw-climate',
                 'prep',
@@ -23,7 +23,7 @@ const ROLES = {
         email: 'user@control-tower.org',
         extraUserData: {
             apps: [
-                'hdx',
+                'un',
                 'gfw',
                 'gfw-climate',
                 'prep',
@@ -40,7 +40,7 @@ const ROLES = {
         email: 'user@control-tower.org',
         extraUserData: {
             apps: [
-                'hdx',
+                'un',
                 'gfw',
                 'gfw-climate',
                 'prep',
@@ -58,7 +58,7 @@ const HDX_DATASET_CREATE_REQUEST = {
         name: '141121-sierra-leone-health-facilities',
         slug: '141121-sierra-leone-health-facilities',
         connectorType: 'rest',
-        provider: 'hdx',
+        provider: 'un',
         userId: '1a10d7c6e0a37126611fd7a7',
         updatedAt: '2018-06-01T11:04:47.231Z',
         createdAt: '2018-06-01T11:04:47.231Z',
@@ -78,7 +78,7 @@ const HDX_DATASET_CREATE_REQUEST = {
         verified: false,
         overwrite: false,
         status: 'pending',
-        tableName: 'fake-hdx-dataset-name',
+        tableName: 'fake-un-dataset-name',
         connectorUrl: null,
         attributesPath: null,
         dataPath: null,
@@ -89,7 +89,7 @@ const HDX_DATASET_CREATE_REQUEST = {
         connector_url: null,
         attributes_path: null,
         data_path: null,
-        table_name: 'fake-hdx-dataset-name'
+        table_name: 'fake-un-dataset-name'
     },
     userId: '1a10d7c6e0a37126611fd7a7',
     loggedUser: {
@@ -324,14 +324,14 @@ const HDX_API_DATASET_RESPONSE_NO_RESOURCE = {
             id: 'fdaaa2b9-5e6e-4790-ba8f-04cdb27e2bbb',
             approval_status: 'approved'
         },
-        name: 'Fake HDX package name',
+        name: 'Fake UN package name',
         isopen: false,
         url: null,
         notes: '4W of the Ecuador Response as of 16th May 2016, compiled by OCHA featuring 4W inputs from:\r\nWASH, Food Security, Education, Protection, CCCM, Shelter, Logistics, Early Recovery  sectors. ',
         owner_org: 'fdaaa2b9-5e6e-4790-ba8f-04cdb27e2bbb',
         has_showcases: false,
         pageviews_last_14_days: 1,
-        title: 'Fake HDX package title',
+        title: 'Fake UN package title',
         package_creator: 'emilieanne'
     }
 };
@@ -353,7 +353,7 @@ const HDX_API_VOCABULARY_RESPONSE = {
                     'fire'
                 ],
                 name: 'knowledge_graph',
-                application: 'hdx'
+                application: 'un'
             }
         }
     ]
@@ -368,11 +368,11 @@ const HDX_API_METADATA_RESPONSE = {
                 dataset: '03a8da41-d8d0-4095-8fd5-267a25d5fc31',
                 application: 'data4sdgs',
                 resource: {
-                    type: 'hdx',
+                    type: 'un',
                     id: '03a8da41-d8d0-4095-8fd5-267a25d5fc31'
                 },
                 language: 'es',
-                name: 'Name for HDX in Spanish',
+                name: 'Name for UN in Spanish',
                 description: 'GDP per capita is gross domestic product divided by midyear population. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current U.S. dollars.',
                 source: 'World Bank national accounts data, and OECD National Accounts data files.',
                 license: 'Open',
@@ -438,13 +438,13 @@ const HDX_API_METADATA_RESPONSE = {
             type: 'metadata',
             attributes: {
                 dataset: '03a8da41-d8d0-4095-8fd5-267a25d5fc31',
-                application: 'hdx',
+                application: 'un',
                 resource: {
                     type: 'dataset',
                     id: '03a8da41-d8d0-4095-8fd5-267a25d5fc31'
                 },
                 language: 'en',
-                name: 'Name for HDX in English',
+                name: 'Name for UN in English',
                 description: 'GDP per capita is gross domestic product divided by midyear population. GDP is the sum of gross value added by all resident producers in the economy plus any product taxes and minus any subsidies not included in the value of the products. It is calculated without making deductions for depreciation of fabricated assets or for depletion and degradation of natural resources. Data are in current U.S. dollars.',
                 source: 'World Bank national accounts data, and OECD National Accounts data files.',
                 license: 'Open',

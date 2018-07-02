@@ -8,13 +8,13 @@ const { getTestServer } = require('./test-server');
 
 const requester = getTestServer();
 
-describe('HDX fake dataset creation tests ', () => {
+describe('UN fake dataset creation tests ', () => {
     // before(() => {
     //
     //     nock.cleanAll();
     //
-    //     // HDX responses for info and metadata on fake dataset
-    //     nock('https://api.hdx.org')
+    //     // UN responses for info and metadata on fake dataset
+    //     nock('https://api.un.org')
     //         .get(`/v1/dataset/${HDX_FAKE_DATASET_CREATE_REQUEST.connector.tableName}?format=json`)
     //         .once()
     //         .reply(404, {
@@ -45,7 +45,7 @@ describe('HDX fake dataset creation tests ', () => {
     //
     // it('Create a dataset for an dataset that doesn\'t exist should return an error', async () => {
     //     const response = await requester
-    //         .post(`/api/v1/hdx/rest-datasets/hdx`)
+    //         .post(`/api/v1/un/rest-datasets/un`)
     //         .send(HDX_FAKE_DATASET_CREATE_REQUEST);
     //     response.status.should.equal(200);
     // });

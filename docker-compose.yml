@@ -1,7 +1,7 @@
 prod:
-  image: vizzuality/hdx-index-adapter:1.2.0${STAGING}
+  image: vizzuality/un-index-adapter:1.2.0${STAGING}
   ports:
-    - "3012"
+    - "3013"
   env_file:
     - prod.env
   command: start
@@ -10,4 +10,4 @@ prod:
   log_driver: "syslog"
   log_opt:
       syslog-address: ${SYSLOG_ADDRESS}
-      tag: hdx-index-adapter${STAGING}
+      tag: un-index-adapter${STAGING}
