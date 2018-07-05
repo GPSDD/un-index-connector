@@ -43,6 +43,10 @@ The task's implementation can be found on `app/src/cron/cron` and the configurat
 
 ## Field correspondence
 
+The UN API provides little metadata when compared to other data providers, which justifies the lack of fields like "license" or "description".
+It also seems to have datasets with no data (empty `data` section) which this connector handles by not importing those datasets.
+
+
 | Field in SDG Metadata     | Field in UN data      | Value         |
 |---------------------------|-----------------------|---------------|
 | userId                    |                       |               |
@@ -64,7 +68,8 @@ The task's implementation can be found on `app/src/cron/cron` and the configurat
 
 ### Taxonomy
 
-TODO: document
+Each dataset is tagged with "United Nations Statistics Division" plus the organisation present in the dataset's data.
+
 
 ### Graph
 

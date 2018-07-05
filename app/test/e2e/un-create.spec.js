@@ -89,6 +89,28 @@ describe('UN Dataset creation tests', () => {
             .once()
             .reply(200);
 
+        nock(`${process.env.CT_URL}`)
+            .post(`/v1/dataset/${UN_DATASET_CREATE_REQUEST.connector.id}/vocabulary`, (body) => {
+                const expectedRequestBody = {
+                    knowledge_graph: {
+                        tags: [
+                            'SDG_6_Clean_Water_and_Sanitation'
+                        ]
+                    },
+                    legacy: {
+                        tags: [
+                            'United Nations Statistics Division',
+                            'Creditor Reporting System (CRS) database, 2018, The Organisation for Economic Co-operation and Development (OECD)'
+                        ]
+                    }
+                };
+
+                body.should.deep.equal(expectedRequestBody);
+                return true;
+            })
+            .once()
+            .reply(200);
+
         const response = await requester
             .post(`/api/v1/un/rest-datasets/un`)
             .send(UN_DATASET_CREATE_REQUEST);

@@ -39,6 +39,7 @@ class UNIndexService {
         logger.debug('Obtaining dataset info and metadata UN dataset ', `${config.un.data}`.replace(':dataset-id', dataset.tableName));
 
         let unDatasetResponse;
+        let sourceOrganization = 'United Nations Statistics Division';
 
         try {
             unDatasetResponse = await requestPromise({
@@ -56,7 +57,6 @@ class UNIndexService {
                 throw new Error(`No dataset data available from UN API: ${dataset.tableName}. Check you have used the correct dataset name.`);
             }
 
-            let sourceOrganization = 'UN';
             let name = dataset.name;
 
             if (unDatasetResponse.data.length !== 0) {
@@ -102,7 +102,7 @@ class UNIndexService {
             throw new Error(`Error obtaining metadata: ${err}`);
         }
 
-        if (!update && unDatasetResponse && unDatasetResponse.data && unDatasetResponse.data.length.length > 0) {
+        if (!update && unDatasetResponse && unDatasetResponse.data && unDatasetResponse.data.length > 0) {
             try {
                 const tags = {
                     1: 'SDG_1_No_Poverty',
@@ -123,15 +123,20 @@ class UNIndexService {
                     16: 'SDG_16_Peace_Justice_and_Strong_Institutions',
                     17: 'SDG_17_Partnership_for_Goals'
                 }
-                const unTags = unDatasetResponse.data.goal;
+                const unTags = unDatasetResponse.data[0].goal;
 
-                const body = {};
+                const body = {
+                    legacy: {
+                        tags: ['United Nations Statistics Division', sourceOrganization]
+                    }
+                };
+
                 if (unTags && unTags.length > 0) {
                     body.knowledge_graph = {
                         tags: unTags.map(e => tags[parseInt(e, 10)])
                     };
                 }
-                if (body.knowledge_graph && body.knowledge_graph.length > 0) {
+                if (body.knowledge_graph && body.knowledge_graph.tags.length > 0) {
                     logger.debug('Tagging dataset for UN dataset', dataset.tableName);
                     await ctRegisterMicroservice.requestToMicroservice({
                         method: 'POST',
