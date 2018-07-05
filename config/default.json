@@ -11,10 +11,9 @@
         "port": 3013
     },
     "un": {
-        "package": "https://data.humdata.org/api/3/action/package_show?id=:package-id",
-        "graph": "https://api.un.org/v1/dataset/:package-id/vocabulary/knowledge_graph",
-        "dataSourceUrl": "https://data.humdata.org/dataset/:package-id",
-        "dataSourceEndpoint": "https://data.humdata.org:resouce-file-path"
+        "data": "https://unstats.un.org/SDGAPI/v1/sdg/Series/Data?pageSize=1&seriesCode=:dataset-id",
+        "dataSourceUrl": "https://unstats.un.org/sdgs/indicators/database/",
+        "dataSourceEndpoint": "https://unstats.un.org/SDGAPI/v1/sdg/Series/Data?pageSize=20000&seriesCode=:dataset-id"
     },
-    "cron": "00 0 1 * * *"
+    "cron": "00 0 1 * * 3"
 }

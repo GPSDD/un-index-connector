@@ -34,31 +34,38 @@ It is necessary to define these environment variables:
 * CT_URL => Control Tower URL
 * NODE_ENV => Environment (prod, staging, dev)
 
+### Cron task
+
+This component executes a periodic task that updates the metadata of each indexed RW dataset. The task is bootstrapped  
+[when the application server starts](https://github.com/GPSDD/un-index-adapter/blob/master/app/src/app.js#L19). 
+The task's implementation can be found on `app/src/cron/cron` and the configuration is loaded from the 
+[config files](https://github.com/GPSDD/un-index-adapter/blob/master/config/default.json#L18)
+
 ## Field correspondence
 
-The field correspondence is based on the metadata object for a single package - I.E. [this link](https://data.humdata.org/api/3/action/package_show?id=141121-sierra-leone-health-facilities).
-In the UN domain, a `package` entity may refer to multiple data files - identified as `resources`. 
-Given that this structure does not match directly to the API structure, we use the following logic to map the UN domain structure to ours:
-
-1. Each UN `package` tentatively corresponds to one API Highways dataset.
-2. Within each `package`, if there's one and only `resource` with `format` of type `JSON`, we use that `resource` on step 4. If not, we proceed to step 3.
-3. Within each `package`, if there's one and only `resource` with `format` of type `CSV`, we use that `resource` on step 4. If not, the `dataset` status is set to `failed` and no metadata is created.
-4. We combine the `package` data and the selected `resource` data to generate metadata as described in the spec table below. 
-
-| Field in SDG Metadata     | Field in UN data     | Value         |
+| Field in SDG Metadata     | Field in UN data      | Value         |
 |---------------------------|-----------------------|---------------|
 | userId                    |                       |               |
 | language                  |                       | 'en'          |
 | resource                  |                       |               |
-| name                      | ? |               |
-| description               | `package.resource.description`        | |
-| sourceOrganization        | `package.organization.title`           | |
-| dataDownloadUrl           | 'https://data.humdata.org' + `package.resource.hdx_rel_url` | |
-| dataSourceUrl             | 'https://data.humdata.org/dataset/' + `package.name`        | |
-| dataSourceEndpoint        | 'https://data.humdata.org' + `package.resource.hdx_rel_url` | |
-| license                   | Try to match the value of `package.license` to one of the [accepted licenses](https://data.world/license-help), fallback to 'Other'  | |
+| name                      | `data[0].seriesDescription` |               |
+| description               | | |
+| sourceOrganization        | `data[0].source` &#124;&#124; ?          | |
+| dataDownloadUrl           | 'https://unstats.un.org/SDGAPI/v1/sdg/Series/Data?pageSize=20000&seriesCode=' + `dataset.tableName` | |
+| dataSourceUrl             | 'https://unstats.un.org/sdgs/indicators/database/'        | |
+| dataSourceEndpoint        | 'https://unstats.un.org/SDGAPI/v1/sdg/Series/Data?pageSize=20000&seriesCode=' + `dataset.tableName` | |
+| license                   |                       | 'Other' |
 | status                    |                       | 'published'   |
 
 
-As for importing `tag` data, the `package.tags.name` will be tentatively matched to the taxonomy entities already present in the graph database, and imported when they match.
-In parallel, the API's `legacy` taxonomy will be populated with the `package.organization.title` value. 
+
+## Dataset tagging strategy
+
+
+### Taxonomy
+
+TODO: document
+
+### Graph
+
+The `data.goal` value will be tentatively matched to a SDG, and tagged if a match is found. 

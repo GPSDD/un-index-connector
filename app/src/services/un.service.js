@@ -3,26 +3,10 @@ const requestPromise = require('request-promise');
 const config = require('config');
 const ctRegisterMicroservice = require('ct-register-microservice-node');
 
-const ACCEPTED_LICENSE_STRINGS = [
-    'Public Domain',
-    'CC-0',
-    'PDDL',
-    'CC-BY',
-    'CDLA-Permissive-1.0',
-    'ODC-BY',
-    'CC-BY-SA',
-    'CDLA-Sharing-1.0',
-    'ODC-ODbL',
-    'CC BY-NC',
-    'CC BY-ND',
-    'CC BY-NC-SA',
-    'CC BY-NC-ND',
-    'Other'
-];
-
 class UNIndexService {
 
     static async cronUpdate() {
+        const timeout = ms => new Promise(res => setTimeout(res, ms))
         try {
             logger.info('Running cron update');
             logger.debug('Obtaining datasets');
@@ -36,6 +20,7 @@ class UNIndexService {
                     try {
                         const dataset = datasets.data[i].attributes;
                         dataset.id = datasets.data[i].id;
+                        await timeout(1000);
                         await UNIndexService.register(dataset, dataset.userId, true);
                     } catch (err) {
                         logger.error('Error updating dataset', err);
@@ -49,59 +34,50 @@ class UNIndexService {
     }
 
     static async register(dataset, userId, update = false) {
-        logger.debug(`Obtaining metadata of HFX package ${dataset.tableName}`);
+        logger.debug(`Obtaining metadata of UN dataset ${dataset.tableName}`);
 
-        logger.debug('Obtaining dataset info and metadata of HFX package ', `${config.un.package}`.replace(':package-id', dataset.tableName));
-        // let sourceOrganization;
-        let hdxPackage;
+        logger.debug('Obtaining dataset info and metadata UN dataset ', `${config.un.data}`.replace(':dataset-id', dataset.tableName));
+
+        let unDatasetResponse;
 
         try {
-            const hdxPackageResponse = await requestPromise({
+            unDatasetResponse = await requestPromise({
                 method: 'GET',
-                url: `${config.un.package}`.replace(':package-id', dataset.tableName),
+                url: `${config.un.data}`.replace(':dataset-id', dataset.tableName),
                 json: true
             });
-            logger.debug('UN package response', hdxPackageResponse);
+            logger.debug('UN package response', unDatasetResponse);
 
-            if (hdxPackageResponse && hdxPackageResponse.result && hdxPackageResponse.result.resources) {
-                hdxPackage = hdxPackageResponse.result;
-            } else {
+            if (!unDatasetResponse || !unDatasetResponse.data || !unDatasetResponse.dimensions) {
                 throw new Error(`Incomplete or invalid data loaded from UN API: ${dataset.tableName}`);
             }
 
-            if (hdxPackage.resources.length === 0) {
-                throw new Error(`No resource data associated with this UN package was found: ${dataset.tableName}`);
+            if (unDatasetResponse.dimensions.length === 0 || unDatasetResponse.attributes.length === 0) {
+                throw new Error(`No dataset data available from UN API: ${dataset.tableName}. Check you have used the correct dataset name.`);
             }
 
-            let hdxResource;
-            const jsonResources = hdxPackage.resources.filter(elem => elem.format.toUpperCase() === 'JSON');
+            let sourceOrganization = 'UN';
+            let name = dataset.name;
 
-            if (jsonResources.length === 1) {
-                hdxResource = jsonResources[0];
+            if (unDatasetResponse.data.length !== 0) {
+                sourceOrganization = unDatasetResponse.data[0].source;
+                name = unDatasetResponse.data[0].seriesDescription;
             } else {
-                const csvResources = hdxPackageResponse.result.resources.filter(elem => elem.format.toUpperCase() === 'CSV');
-                if (csvResources.length === 1) {
-                    hdxResource = csvResources[0];
-                }
+                throw new Error(`No data found with dataset: ${dataset.tableName}`);
             }
 
-            if (!hdxResource) {
-                throw new Error(`No single JSON or CSV resource found for UN package ${dataset.tableName}`);
-            }
-
-            const dataDownloadURL = config.un.dataSourceEndpoint.replace(':resouce-file-path', hdxResource.hdx_rel_url);
-            const dataSourceUrl = config.un.dataSourceUrl.replace(':package-id', dataset.tableName);
+            const dataDownloadURL = config.un.dataSourceEndpoint.replace(':dataset-id', dataset.tableName);
+            const dataSourceUrl = config.un.dataSourceUrl.replace(':dataset-id', dataset.tableName);
 
             const metadata = {
                 language: 'en',
-                name: hdxPackage.title || dataset.name,
-                description: hdxResource.description,
-                sourceOrganization: hdxPackage.organization.title,
+                name,
+                sourceOrganization,
                 dataSourceUrl,
                 dataSourceEndpoint: dataDownloadURL,
                 dataDownloadUrl: dataDownloadURL,
                 status: 'published',
-                license: ACCEPTED_LICENSE_STRINGS.includes(hdxPackage.license) ? hdxPackage.license : 'Other',
+                license: 'Other',
                 userId
             };
             logger.debug('Saving metadata', metadata);
@@ -126,37 +102,49 @@ class UNIndexService {
             throw new Error(`Error obtaining metadata: ${err}`);
         }
 
-        // if (!update && hdxPackage) {
-        //     try {
-        //         let hdxTags = hdxPackage.tags.map(elem => elem.name);
-        //
-        //         const body = {
-        //             legacy: {
-        //                 tags: ['UN API', hdxPackage.organization.title]
-        //             }
-        //         };
-        //         if (hdxTags && hdxTags.length > 0) {
-        //             body.knowledge_graph = {
-        //                 tags: hdxTags
-        //             };
-        //         }
-        //
-        //         if (sourceOrganization && sourceOrganization !== 'UN API') {
-        //             body.legacy.tags.push(sourceOrganization);
-        //         }
-        //
-        //         logger.debug('Tagging dataset for UN dataset', dataset.tableName);
-        //         await ctRegisterMicroservice.requestToMicroservice({
-        //             method: 'POST',
-        //             uri: `/dataset/${dataset.id}/vocabulary`,
-        //             body,
-        //             json: true
-        //         });
-        //     } catch (err) {
-        //         logger.error('Error tagging dataset', err);
-        //         throw new Error(`Error tagging dataset: ${err}`);
-        //     }
-        // }
+        if (!update && unDatasetResponse && unDatasetResponse.data && unDatasetResponse.data.length.length > 0) {
+            try {
+                const tags = {
+                    1: 'SDG_1_No_Poverty',
+                    2: 'SDG_2_Zero_Hunger',
+                    3: 'SDG_3_Good_Health_and_Well-being',
+                    4: 'SDG_4_Quality_Education',
+                    5: 'SDG_5_Gender_Equality',
+                    6: 'SDG_6_Clean_Water_and_Sanitation',
+                    7: 'SDG_7_Affordable_and_Clean_Energy',
+                    8: 'SDG_8_Decent_Work_and_Economic_Growth',
+                    9: 'SDG_9_Industry_Innovation_and_Infrastructure',
+                    10: 'SDG_10_Reduced_Inequalities',
+                    11: 'SDG_11_Sustainable_Cities_and_Communities',
+                    12: 'SDG_12_Responsible_Consumption_and_Production',
+                    13: 'SDG_13_Climate_Action',
+                    14: 'SDG_14_Life_below_Water',
+                    15: 'SDG_15_Life_on_Land',
+                    16: 'SDG_16_Peace_Justice_and_Strong_Institutions',
+                    17: 'SDG_17_Partnership_for_Goals'
+                }
+                const unTags = unDatasetResponse.data.goal;
+
+                const body = {};
+                if (unTags && unTags.length > 0) {
+                    body.knowledge_graph = {
+                        tags: unTags.map(e => tags[parseInt(e, 10)])
+                    };
+                }
+                if (body.knowledge_graph && body.knowledge_graph.length > 0) {
+                    logger.debug('Tagging dataset for UN dataset', dataset.tableName);
+                    await ctRegisterMicroservice.requestToMicroservice({
+                        method: 'POST',
+                        uri: `/dataset/${dataset.id}/vocabulary`,
+                        body,
+                        json: true
+                    });
+                }
+            } catch (err) {
+                logger.error('Error tagging dataset', err);
+                throw new Error(`Error tagging dataset: ${err}`);
+            }
+        }
     }
 
 }
