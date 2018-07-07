@@ -60,7 +60,7 @@ class UNIndexService {
             let name = dataset.name;
 
             if (unDatasetResponse.data.length !== 0) {
-                sourceOrganization = unDatasetResponse.data[0].source;
+                sourceOrganization = unDatasetResponse.data[0].source || sourceOrganization;
                 name = unDatasetResponse.data[0].seriesDescription;
             } else {
                 throw new Error(`No data found with dataset: ${dataset.tableName}`);
