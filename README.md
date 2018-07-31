@@ -7,6 +7,10 @@ This repository is the microservice that implements the UN Index Adapter functio
 
 ## Getting Started
 
+### Initial import
+
+This connector is used to keep a set of UN Statistics Datasets "in-sync" with the source data (https://unstats.un.org/SDGAPI). Here is the script to [perform the initial import](https://github.com/GPSDD/index-adapter-scripts/blob/master/importUN.py).
+
 ### OS X
 
 **First, make sure that you have the [API gateway running
