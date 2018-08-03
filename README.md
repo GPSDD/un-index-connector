@@ -9,7 +9,7 @@ This repository is the microservice that implements the UN Index Adapter functio
 
 ### Initial import
 
-This connector is used to keep a set of UN Statistics Datasets "in-sync" with the source data (https://unstats.un.org/SDGAPI). Here is the script to [perform the initial import](https://github.com/GPSDD/index-adapter-scripts/blob/master/importUN.py).
+This connector is used to keep a set of UN Statistics Datasets "in-sync" with the source data (https://unstats.un.org/SDGAPI). Here is the script to [perform the initial import](https://github.com/GPSDD/index-connector-scripts/blob/master/importUN.py).
 
 ### OS X
 
@@ -22,8 +22,8 @@ that you have [Docker Compose](https://docs.docker.com/compose/install/)
 installed on your machine.
 
 ```
-git clone https://github.com/GPSDD/un-index-adapter.git
-cd un-index-adapter
+git clone https://github.com/GPSDD/un-index-connector.git
+cd un-index-connector
 ./adapter.sh develop
 ```text
 
@@ -41,9 +41,9 @@ It is necessary to define these environment variables:
 ### Cron task
 
 This component executes a periodic task that updates the metadata of each indexed RW dataset. The task is bootstrapped  
-[when the application server starts](https://github.com/GPSDD/un-index-adapter/blob/master/app/src/app.js#L19). 
+[when the application server starts](https://github.com/GPSDD/un-index-connector/blob/master/app/src/app.js#L19). 
 The task's implementation can be found on `app/src/cron/cron` and the configuration is loaded from the 
-[config files](https://github.com/GPSDD/un-index-adapter/blob/master/config/default.json#L18)
+[config files](https://github.com/GPSDD/un-index-connector/blob/master/config/default.json#L18)
 
 ## Field correspondence
 
