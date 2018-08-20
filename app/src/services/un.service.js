@@ -78,6 +78,9 @@ class UNIndexService {
                 dataDownloadUrl: dataDownloadURL,
                 status: 'published',
                 license: 'Other',
+                info: {
+                    license: 'http://data.un.org/Host.aspx?Content=UNdataUse'
+                },
                 userId
             };
             logger.debug('Saving metadata', metadata);
