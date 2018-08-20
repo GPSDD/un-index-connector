@@ -66,6 +66,9 @@ describe('UN Dataset creation tests', () => {
                     dataDownloadUrl: `https://unstats.un.org/SDGAPI/v1/sdg/Series/Data?pageSize=20000&seriesCode=${UN_DATASET_CREATE_REQUEST.connector.tableName}`,
                     status: 'published',
                     license: 'Other',
+                    info: {
+                        license: 'http://data.un.org/Host.aspx?Content=UNdataUse'
+                    },    
                     userId: '1a10d7c6e0a37126611fd7a7'
                 };
 
