@@ -12,7 +12,7 @@ class UNIndexService {
             logger.debug('Obtaining datasets');
             const datasets = await ctRegisterMicroservice.requestToMicroservice({
                 method: 'GET',
-                uri: `/dataset?provider=un&page[size]=99999`,
+                uri: `/dataset?provider=un&includes=metadata&page[size]=99999`,
                 json: true
             });
             if (datasets && datasets.data) {
@@ -84,7 +84,7 @@ class UNIndexService {
                 userId
             };
             logger.debug('Saving metadata', metadata);
-            if (!update) {
+            if (!update || dataset.metadata.length === 0) {
                 await ctRegisterMicroservice.requestToMicroservice({
                     method: 'POST',
                     uri: `/dataset/${dataset.id}/metadata`,
