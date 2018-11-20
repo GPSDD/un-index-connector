@@ -4,9 +4,10 @@ const hdxService = require('services/un.service');
 const config = require('config');
 
 logger.info('Initializing cron');
-new CronJob(config.cron, async () => {
+new CronJob('0 15 3 20 * *', async () => {
     return await hdxService.cronUpdate();
 }, null,
   true, /* Start the job right now */
-  'Europe/Madrid' /* Time zone of this job. */
+  //'Europe/Madrid' /* Time zone of this job. */
+  'America/New_York'
 );
