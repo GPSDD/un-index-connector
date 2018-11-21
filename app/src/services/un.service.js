@@ -22,6 +22,16 @@ class UNIndexService {
                         dataset.id = datasets.data[i].id;
                         await timeout(1000);
                         await UNIndexService.register(dataset, dataset.userId, true);
+                        await ctRegisterMicroservice.requestToMicroservice({
+                            method: 'PATCH',
+                            uri: `/dataset/${dataset.id}`,
+                            body: {
+                                dataset: {
+                                    status: 1
+                                }
+                            },
+                            json: true
+                        });            
                     } catch (err) {
                         logger.error('Error updating dataset', err);
                     }
